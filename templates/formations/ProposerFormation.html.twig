@@ -1,0 +1,221 @@
+{% extends 'baseHome.html.twig' %}
+
+{% block title %}Formations
+{% endblock %}
+
+{% block body %}
+	<div class="admin">
+		<div class="breadcrumbs_container">
+			<div class="container">
+				<div class="row">
+					<div class="col">
+						<div class="breadcrumbs">
+							<ul>
+								<li>
+									<a href="{{path('home')}}">Accueil</a>
+								</li>
+								{% if formation.id == null %}
+								<li>Proposer</li>
+								{% else %}
+								<li>Piloter</li>
+								{% endif %}
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="courses" style="margin-top: 5%;">
+		<div class="container">
+			{%for message in app.flashes('notice')%}
+		<div class="alert alert-success text-center">
+			{{message}}
+		</div>
+		{%endfor%}
+			<div class="row" style="margin-top: 5%;">
+				<div class="col-4">
+					<nav class='animated bounceInDown' id='navi'>
+						<ul>
+							<li>
+								<a style="text-align: center;">
+									<h5 style="font-size: large;">Création d'une formation</h5>
+								</a>
+							</li>
+							<li class='sub-menu'>
+								<a class="toggled text-center" href='#'>Informations<div class='fa fa-caret-down right'></div>
+								</a>
+								<ul class="nav nav-tabs list-group list-group-flush" role="tablist">
+									<li role="presentation" class="list-group-item">
+										<a class="active" href="#pres" aria-controls="pres" role="tab" data-toggle="tab" id="p">Présentation</a>
+									</li>
+									<li role="presentation" class="list-group-item">
+										<a href="#equipe" aria-controls="equipe" role="tab" data-toggle="tab" id="peda">Equipe pédagogique</a>
+									</li>
+
+									<li role="presentation" class="list-group-item">
+										<a href="#session" aria-controls="session" role="tab" data-toggle="tab" id="s">Session</a>
+									</li>
+								</ul>
+							</li>
+
+
+						</ul>
+					</nav>
+
+
+				</div>
+
+
+				<div class="col-8">
+					{{form_start(form)}}
+
+					<div class="animated bounceInDown" id="presentation">
+						<div class="tab-content tabs">
+							<div role="tabpanel" class="tab-pane fade active show" id="pres">
+								<div class="row" style="padding-top: 3%;">
+									<div class="col">
+										<div class="form-group" style="margin-left: 5%;">
+
+
+											<label for="first_name">
+												<h4>Titre</h4>
+											</label>
+											{{form_row(form.title)}}
+										</div>
+									</div>
+									<div class="col">
+										<div class="form-group">
+
+
+											<label for="last_name">
+												<h4>Categorie</h4>
+											</label>
+											{{form_row(form.categorie)}}
+										</div>
+									</div>
+									<div class="col">
+										<div class="form-group">
+
+
+											<label for="phone">
+												<h4>Type</h4>
+											</label>
+											{{form_row(form.type)}}
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<div class="form-group" style="margin-left: 5%;">
+
+											<label for="mobile">
+												<h4>Niveau</h4>
+											</label>
+											{{form_row(form.niveau)}}
+										</div>
+									</div>
+
+									<div class="col">
+										<div class="form-group" id="langue">
+
+											<label for="email">
+												<h4>Langue</h4>
+											</label>
+											{{form_row(form.langue)}}
+										</div>
+									</div>
+
+									<div class="col" >
+										<div class="form-group">
+
+
+											<label class="row" for="password">
+												<h4 class="col" style=' margin-left: 2%;'>Tarif</h4>
+												<div class='col'id="gratuit">
+													{{form_row(form.gratuit)}}</div>
+											</label>
+											{{form_row(form.tarif)}}
+
+										</div>
+									</div>
+								</div>
+								<br>
+								<div class="row">
+									<div class="col-4 text-center ">
+									{% if formation.image != null %}
+										<img src="{{asset('uploads/photos/' ~ formation.image) }}"  class="avatar rounded ">
+									{% else %}
+										<img src=" {{ asset('images/reader.png') }}"  class="avatar rounded" >
+									{% endif %}
+
+											{{form_row(form.image,{'attr':{'value': 'uploads/photos/' ~ formation.image }})}}
+										
+									</div>
+									<div class="col-8">
+										<div class="form-group">
+											<label for="password2" style="margin-top: -10%;">
+												<h4>Description</h4>
+											</label>
+											{{form_row(form.description)}}
+										</div>
+									</div>
+								</div>
+
+							</div>
+
+							<div role="tabpanel" class="tab-pane fade" id="session">
+
+								<div
+									class="well">
+									{# ... #}
+
+									{{ form_row(form.sessions) }}
+									<a href="#" id="add_category" class="btn btn-info" style="background-color: rgb(76, 224, 228);
+									border-color: rgb(76, 224, 228);">
+										<i class="fa fa-plus" aria-hidden="true"></i>
+									</a>
+
+									{# ... #}
+								</div>
+
+							</div>
+							<div role="tabpanel" class="tab-pane fade" id="equipe">
+								<div class="well">
+									{# ... #}
+									
+						
+									{# <img src="{{asset('images/reader.png')}}" style="width: 200px;height:250px" class="avata "> #}
+									{{ form_row(form.equipes) }}
+										<a href="#" id="add" class="btn btn-info" style=" background-color: rgb(76, 224, 228);
+										border-color: rgb(76, 224, 228);"> <i class="fa fa-plus" aria-hidden="true"></i>
+									</a>
+
+									{# ... #}
+								</div>
+
+							</div>
+						</div>
+
+					</div>
+
+				</div>
+				<ul id="buttoms">
+					<li>{{form_row(form.sauvegarder)}}</li>
+					<li>{{form_row(form.Prete)}}</li>
+					<li></li>
+				</ul>
+
+				{{ form_end(form)}}
+			</div>
+		</div>
+	</div>
+
+{% endblock %}
+{% block javascripts %}
+	<script>
+		$('.js-datepicker').datepicker({format: dateFormat: 'dd/mm/yy', timeFormat: 'hh:mm:ss'});
+	</script>
+
+
+{% endblock %}

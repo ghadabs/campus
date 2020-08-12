@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Log in!
+{% endblock %}
+
+{% block body %}
+	<form method="post" action="{{ path('login') }}">
+
+		<div class="body"></div>
+		<div class="grad" style="background-image:url(images/talan.jpg);width: 110%;height: 110%;""></div>
+		<div class="header">
+			<div>Campus<span>Talan
+				</span>
+			</div>
+		</div>
+		<br>
+		<div class="login">
+
+			{% if error %}
+				<div class="alert alert-danger" style="font-family: 'Exo', sans-serif;font-size: 13px; margin-bottom: 2%;">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+			{% endif %}
+
+			{% if app.user %}
+				<div class="mb-3" style="font-family: 'Exo', sans-serif;font-size: 13px; margin-bottom: 2%;">
+					You are logged in as
+					{{ app.user.username }},
+					<a href="{{ path('app_logout') }}" style="color:rgb(76, 224, 228)">Logout</a>
+				</div>
+			{% endif %}
+
+			<input type="text" name="_username" id="inputEmail" class="form-control" placeholder="Email" required autofocus><br>
+			<input type="password" name="_password" id="inputPassword" class="form-control" placeholder="Password" required><br>
+			<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+			<input type="submit" href="{{path('_login_redirect')}}" value="Login">
+			<br>
+			<a href="{{ path('register') }}" style="color:rgb(76, 224, 228);text-decoration: none;font-family: 'Exo', sans-serif;
+				    margin-left: 48%;">Créer un compte</a>
+		</div>
+
+
+	</form>
+{% endblock %}

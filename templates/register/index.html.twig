@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello RegisterController!
+{% endblock %}
+
+{% block body %}
+
+	<!-- partie filter de la page Browse Jobs -->
+	{{form_start(form1)}}
+	<div class="body"></div>
+	<div class="grad" style="background-image:url(images/talan.jpg);width: 110%;height: 110%;"></div>
+	<div class="header">
+		<div>Campus<span>Talan
+			</span>
+		</div>
+	</div>
+	<br>
+
+	<div class="login">
+		{%for message in app.flashes('notice')%}
+		<div class="alert alert-success text-center" style="margin-bottom:2%;font-family: Exo ,sans-serif;">
+			{{message}}
+		</div>
+		{%endfor%}
+
+		<div class="sticky-top">
+			<div class="clearfix">
+				{{form_row(form1.email,{'attr': {'class': 'form-control'}})}}
+			</div>
+			<div class="clearfix">
+				{{form_row(form1.name)}}
+			</div>
+
+			<div class="clearfix">
+				{{form_row(form1.password)}}
+			</div>
+
+
+			<div class="clearfix">
+				{{form_row(form1.image)}}
+			</div>
+
+
+			<div>
+				<input type="submit" href="#" value="Inscrire">
+			</div>
+
+		</div>
+		{{form_end(form1)}}
+
+	</div>
+{% endblock %}

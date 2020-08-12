@@ -1,0 +1,198 @@
+{% extends 'baseHome.html.twig' %}
+
+{% block title %}Hello SessionController!
+{% endblock %}
+
+{% block body %}
+
+
+	<div class="admin">
+		<div class="breadcrumbs_container">
+			<div class="container">
+				<div class="row">
+					<div class="col">
+						<div class="breadcrumbs">
+							<ul>
+								<li>
+									<a href="index.html">Home</a>
+								</li>
+								<li>Courses</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="container">
+		<div
+			class="row">
+
+
+			<!-- Courses Main Content -->
+			<div class="col-lg-12">
+				<div class="courses_search_container" style="margin-top:2%">
+					{% include 'filterSession.html.twig' with {form:form} only %}
+				</div>
+				<br>
+				{%for message in app.flashes('notice')%}
+					<div class="alert alert-success text-center">
+						{{message}}
+					</div>
+					{%endfor%}
+
+					<div class="courses_container">
+						<div
+							class="row courses_row">
+
+							<!-- Course -->
+							<div class="col-lg-12 course_col">
+								<div class="tabs d-flex flex-row align-items-center justify-content-start">
+									<div class="tab active">Sessions</div>
+								</div>
+								<div
+									class="tab_panels">
+
+									<!-- Description -->
+									{% for s in session %}
+										<div class="tab_panel active">
+											<p>Prévue le :</p>
+											<div class="row">
+
+												<div class="col row" style="max-width:fit-content;">
+
+													<div class="col" style="max-width:min-content;">
+														<div class="tab_panel_title">{{s.dateDeb|date('d') }}</div>
+													</div>
+													<div class="row">
+														<div class="col">
+															<div class="tab_panel_title" id="mois">{{s.dateDeb|format_date('MMM', 'fr', 'Europe/Paris', constant('IntlDateFormatter::LONG')) }}</div>
+															<div class="tab_panel_title" id="year">{{s.dateDeb|date('Y') }}</div>
+														</div>
+													</div>
+
+												</div>
+												<div class="tab_panel_content col" style="text-align:center">
+													<div class="tab_panel_text">
+														<p>{{s.formation.title}}</p>
+														{% if s.dateDeb|date('d') == s.dateFin|date('d') %}
+															<h5>Durée:
+																{{s.dateDeb|date('H:i')}}
+																-
+																{{s.dateFin|date('H:i')}}</h5>
+														{% else %}
+															<h5>
+																jusqu'à
+																{{s.dateFin|format_date(null, 'fr', 'Europe/Paris', constant('IntlDateFormatter::LONG')) }}</h5>
+														{% endif %}
+													</div>
+
+
+												</div>
+												<div class="tab_panel_content col">
+													<div class="tab_panel_text">
+														<h5>Nombre de places disponibles:
+															<span style="color: #76777a;">{{s.nbrePlaces}}</h5>
+															<p>{{s.adresse}}</p>
+															{% if is_granted('ROLE_ADMIN') or s.formation in app.user.formation %}
+																<button type="submit" class="btn btn-outline-info" style="color:rgb(76, 224, 228);float: right" data-toggle="modal" data-target="#exampleModal">
+																	<a style="color:rgb(76, 224, 228)" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgb(76, 224, 228)';">
+																		liste des inscrits</a>
+																</button>
+															{% endif %}
+															{% if s.nbrePlaces > 0 %}
+
+																<button type="submit" class="btn btn-outline-info" style="color:rgb(76, 224, 228);float: right;margin-right:1%" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgb(76, 224, 228)';">
+																	<a style="color:rgb(76, 224, 228);" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgb(76, 224, 228)';" href="{{path('inscrire',{ 'id': s.id })}}">
+																		Inscrire</a>
+																</button>
+
+															{% else %}
+																<p style="float:right">Le nombre de places est saturé.</p>
+																<p>
+																{% endif %}
+															</div>
+
+
+														</div>
+													</div>
+												</div>
+												<br>
+
+											</div>
+
+
+										</div>
+									
+									{% endfor %}
+								</div>
+							</div>
+
+						</div>
+
+
+					</div>
+					<div class="row pagination_row">
+						<div class="col">
+							<div class="pagination_container d-flex flex-row align-items-center justify-content-start"></div>
+							{{ knp_pagination_render(session) }}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div></div></div><div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"><div class="modal-dialog" role="document">
+<div class="modal-content">
+	<div class="modal-header">
+		<h6 class="text-center" id="exampleModalLabel" style='font-family: Roboto Slab, serif;font-size: x-large;'>Inscription</h6>
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<div class="modal-body">
+
+		<div class="sticky-top">
+
+
+			<table class="table">
+				<thead style="background-color:rgb(76, 224, 228);">
+					<tr>
+
+						<th scope="col" style='color: white;font-family: Roboto Slab, serif;'>Email</th>
+						<th scope="col" style='color: white;font-family: Roboto Slab, serif;'>Nom</th>
+
+					</tr>
+				</thead>
+				<tbody>
+					{% for s in session %}
+						{% for u in s.users %}
+							<tr>
+
+								<td style="font-family: 'Roboto Slab', serif;color: #384158;">{{u.email}}</td>
+								<td style="font-family: 'Roboto Slab', serif;color: #384158;">{{u.name}}</td>
+
+							</tr>
+						{% endfor %}
+					{% endfor %}
+
+				</tbody>
+			</table>
+
+
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+
+	</div>
+
+</div></div></div>{% endblock %}
+{% block javascripts %}{{parent()}}
+<script>
+$('.js-datepicker').datepicker({format: 'yyyy.MM.dd'});
+
+</script>{% endblock %}

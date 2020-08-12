@@ -1,0 +1,9 @@
+swiftmailer:
+    transport: gmail
+    auth_mode: login
+    port: 465
+    host: smtp.gmail.com
+    username: 'ghadabensalem0@gmail.com'
+    password: 'Ghada1997!'
+    spool: { type: 'memory' }
+    

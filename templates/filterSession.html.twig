@@ -1,0 +1,15 @@
+{{ form_start(form, {attr: {class: 'home_search_form d-flex flex-lg-row flex-column align-items-center justify-content-between',id:"home_search_form_1"}}) }}
+
+<div class="d-flex flex-row align-items-center justify-content-start" style="margin-top:2.5%">
+	
+	{{ form_widget(form.formations, {'attr': {'class': 'courses_search_select courses_search_input','style':'border: none;'}}) }}
+	{{ form_widget(form.dateDeb,  { 'attr':{ 'class':'js-datepicker form-control','style':'border: none;'} }) }}
+	{{ form_widget(form.dateFin,  { 'attr':{ 'class':'js-datepicker form-control','style':'border: none;' } }) }}
+
+</div>
+
+<button type="submit" class="home_search_button">Recherche</button>
+
+
+{{ form_end(form) }}
+

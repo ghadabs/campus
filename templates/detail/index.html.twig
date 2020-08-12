@@ -1,0 +1,381 @@
+{% extends 'baseHome.html.twig' %}
+
+{% block title %}Detail
+{% endblock %}
+
+{% block body %}
+	<!-- Home -->
+
+	<div class="admin">
+		<div class="breadcrumbs_container">
+			<div class="container">
+				<div class="row">
+					<div class="col">
+						<div class="breadcrumbs">
+							<ul>
+								<li>
+									<a href="{{path('home')}}">Accueil</a>
+								</li>
+								<li>
+									{% if formation.type.id == 1 %}
+										<a href="{{path('enLigne')}}">Formations</a>
+									{% else %}
+										<a href="{{path('presentielles')}}">Formations</a>
+									{% endif %}
+								</li>
+								<li>Formation Détails</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Course -->
+
+	<div class="course" style="padding-top: 57px;padding-bottom: 100px;">
+		<div class="container">
+			<div
+				class="row">
+
+				<!-- Course -->
+				<div class="col-lg-8">
+				{%for message in app.flashes('info')%}
+					<div class="alert alert-success text-center">
+						{{message}}
+					</div>
+					{%endfor%}
+
+					<div class="course_container">
+						<div class="course_title">{{formation.title}}</div>
+						<div
+							class="course_infos d-flex flex-lg-row flex-column align-items-lg-center align-items-start justify-content-start">
+
+							<!-- Course Info Item -->
+							<div class="course_info_item">
+								<div class="course_info_titre">Publiée par:</div>
+								<div class="course_text">
+									<p>{{formation.user.name}}</p>
+								</div>
+							</div>
+
+							<!-- Course Info Item -->
+							<div class="course_info_item">
+								<div class="course_info_titre">Type:</div>
+								<div class="course_text">
+									<p>{{formation.type.nom}}</p>
+								</div>
+							</div>
+
+							<!-- Course Info Item -->
+							<div class="course_info_item">
+								<div class="course_info_titre">Catégorie:</div>
+								<div class="course_text">
+									<p>{{formation.categorie.nom}}</p>
+								</div>
+							</div>
+
+						</div>
+
+						<!-- Course Image -->
+						<br>
+						<div class="course_image" style="border-top-left-radius: 0px;border-top-right-radius: 0px"><img id="image" src="{{asset('uploads/photos/'~ formation.image) }}" alt=""></div>
+
+						<!-- Course Tabs -->
+						<div class="course_tabs_container">
+							<div class="tabs d-flex flex-row align-items-center justify-content-start">
+								<div class="tab active">Description</div>
+							</div>
+							<div
+								class="tab_panels">
+
+								<!-- Description -->
+								<div class="tab_panel active">
+									<div class="tab_panel_title" style="font-size: 20px;">{{formation.title}}</div>
+									<div class="tab_panel_content">
+										<div class="tab_panel_text">
+											<p>{{formation.description}}</p>
+										</div>
+
+
+									</div>
+								</div>
+							</div>
+							<br>
+							{% if formation.sessions | length > 0 %}
+								<div class="tabs d-flex flex-row align-items-center justify-content-start">
+									<div class="tab active">Sessions</div>
+								</div>
+								<div
+									class="tab_panels">
+
+									<!-- Description -->
+									{% for s in sessions %}
+										<div class="tab_panel active">
+											<p>Prévue le :</p>
+											<div class="row">
+
+												<div class="col row" style="max-width:fit-content;">
+
+													<div class="col" style="max-width:min-content;">
+														<div class="tab_panel_title">{{s.dateDeb|date('d') }}</div>
+													</div>
+													<div class="row">
+														<div class="col">
+															<div class="tab_panel_title" id="mois">{{s.dateDeb|format_date('MMM', 'fr', 'Europe/Paris', constant('IntlDateFormatter::LONG')) }}</div>
+															<div class="tab_panel_title" id="year">{{s.dateDeb|date('Y') }}</div>
+														</div>
+													</div>
+
+												</div>
+												<div class="tab_panel_content col" style="text-align:center">
+													<div class="tab_panel_text">
+														<p>{{s.formation.title}}</p>
+														{% if s.dateDeb|date('d') == s.dateFin|date('d') %}
+															<h5>Durée:
+																{{s.dateDeb|date('H:i')}}
+																-
+																{{s.dateFin|date('H:i')}}</h5>
+														{% else %}
+															<h5>
+																jusqu'à
+																{{s.dateFin|format_date(null, 'fr', 'Europe/Paris', constant('IntlDateFormatter::LONG')) }}</h5>
+														{% endif %}
+													</div>
+
+
+												</div>
+												<div class="tab_panel_content col">
+													<div class="tab_panel_text">
+														<h5>Nombre de places disponibles:
+															<span style="color: #76777a;">{{s.nbrePlaces}}</h5>
+															<p>{{s.adresse}}</p>
+															<br>
+															{% if is_granted('ROLE_ADMIN') or s.formation in app.user.formation %}
+																<button type="submit" class="btn btn-outline-info" style="color:rgb(76, 224, 228);float: right" data-toggle="modal" data-target="#exampleModal1">
+																	<a style="color:rgb(76, 224, 228)" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgb(76, 224, 228)';">
+																		liste des inscrits</a>
+																</button>
+															{% endif %}
+																{% if s.nbrePlaces > 0 %}
+
+																<button type="submit" class="btn btn-outline-info" style="color:rgb(76, 224, 228);float: right;margin-right:1%" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgb(76, 224, 228)';">
+																	<a style="color:rgb(76, 224, 228);" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgb(76, 224, 228)';" href="{{path('inscription',{ 'id': s.id })}}">
+																		Inscrire</a>
+																</button>
+
+															{% else %}
+																<p style="float:right">Le nombre de places est saturé.</p>
+																<p>
+																{% endif %}
+														</div>
+
+
+													</div>
+												</div>
+											</div>
+											<br>
+										
+										
+										{% endfor %}
+										
+										{% if formation in app.user.formation %}
+											 <button type="button" class="btn btn-link float-right" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">  <a href="#"class="float-right" style="color: rgb(76, 224, 228);">Ajouter une autre session</a></button>   
+											{% endif %}	
+									</div>
+
+								{% endif %}
+							</div>
+								
+						</div>
+					</div>
+
+					<!-- Course Sidebar -->
+					<div class="col-lg-4">
+						<div
+							class="sidebar">
+
+							<!-- Feature -->
+							<div class="sidebar_section">
+								<div class="sidebar_section_title">Détails</div>
+								<div
+									class="sidebar_feature">
+
+
+									<!-- Features -->
+									<div
+										class="feature_list">
+
+										<!-- Feature -->
+										<div class="feature d-flex flex-row align-items-center justify-content-start">
+											<div class="feature_title">
+												<i class="fa fa-money" aria-hidden="true"></i>
+												<span>Tarif:</span>
+											</div>
+											{% if formation.tarif == 'Gratuit'%}
+											<div class="feature_text ml-auto">{{formation.tarif}}</div>
+											{% else %}
+											<div class="feature_text ml-auto">{{formation.tarif}} DT</div>
+											{% endif %}
+										</div>
+
+										<!-- Feature -->
+										<div class="feature d-flex flex-row align-items-center justify-content-start">
+											<div class="feature_title">
+												<i class="fa fa-graduation-cap" aria-hidden="true"></i>
+												<span>Niveau:</span>
+											</div>
+											<div class="feature_text ml-auto">{{formation.niveau.nom}}</div>
+										</div>
+
+										<!-- Feature -->
+										<div class="feature d-flex flex-row align-items-center justify-content-start">
+											<div class="feature_title">
+												<i class="fa fa-language" aria-hidden="true"></i>
+												<span>Langue:</span>
+											</div>
+											<div class="feature_text ml-auto">{{formation.langue.nom}}</div>
+										</div>
+
+
+									</div>
+								</div>
+							</div>
+
+							<!-- Feature -->
+							<div class="sidebar_section">
+								<div class="sidebar_section_title">Equipe pédagogique</div>
+								<div class="sidebar_teacher">
+									<ul>
+									{% for e in equipe %}
+										<li>
+											<div class="teacher_title_container d-flex flex-row align-items-center justify-content-start">
+												<div class="teacher_image"><img src="{{asset('uploads/photos/'~ e.photo) }}" alt=""></div>
+												<div class="teacher_title">
+													<div class="teacher_name">
+														<a href="#">{{e.nom}}</a>
+													</div>
+													<div class="teacher_position">{{e.profession}}</div>
+												</div>
+											</div>
+										</li>
+										{% endfor %}
+										<br>
+
+										<ul></div>
+									</div>
+
+
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title text-center" id="exampleModalLabel">Nouvelle Session</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+	  {{form_start(form)}}
+        <div class="row">
+          <div class="form-group col-6">
+            <label for="recipient-name" class="col-form-label"><h6>Début d'inscription:</h6></label>
+            {{form_row(form.date_inscri_deb,{ 'attr': {'class': 'form-control'}} )}}
+          </div>
+          <div class="form-group col-6">
+            <label for="message-text" class="col-form-label"><h6>Fin d'inscription:</h6></label>
+            {{form_row(form.date_inscri_fin,{ 'attr': {'class': 'form-control'}} )}}
+          </div>
+          </div>
+         <div class="row">
+          <div class="form-group col-6">
+            <label for="message-text" class="col-form-label"><h6>Nombre de places:</h6></label>
+            {{form_row(form.nbrePlaces,{ 'attr': {'class': 'form-control'}} )}}
+          </div>
+        <div class="form-group col-6">
+        <label for="message-text" class="col-form-label"><h6>Début de session:</h6></label>
+            {{form_row(form.date_deb,{ 'attr': {'class': 'form-control'}} )}}
+        </div>
+         </div>
+         <div class="row">
+        <div class="form-group col-6">
+            <label for="message-text" class="col-form-label"><h6>Fin de session:</h6></label>
+            {{form_row(form.date_fin,{ 'attr': {'class': 'form-control'}} )}}
+        </div>
+        <div class="form-group col-6">
+            <label for="message-text" class="col-form-label"><h6>Adresse:</h6></label>
+            {{form_row(form.adresse,{ 'attr': {'class': 'form-control'}} )}}
+        </div>
+         </div>
+          
+        </div>
+        
+   
+      <div class="modal-footer">
+        <button type="reset"  class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+        <button type="submit" style="border-color: rgb(76, 224, 228);background-color: rgb(76, 224, 228);" class="btn btn-success" style="width: 16%;">Ajouter</button>
+      </div>
+      {{form_end(form)}}
+	  
+		</div>
+       </div> 
+    </div>
+  </div>
+</div>	
+
+<div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"><div class="modal-dialog" role="document">
+<div class="modal-content">
+	<div class="modal-header">
+		<h6 class="text-center" id="exampleModalLabel" style='font-family: Roboto Slab, serif;font-size: x-large;'>Inscription</h6>
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<div class="modal-body">
+
+		<div class="sticky-top">
+
+
+			<table class="table">
+				<thead style="background-color:rgb(76, 224, 228);">
+					<tr>
+
+						<th scope="col" style='color: white;font-family: Roboto Slab, serif;'>Email</th>
+						<th scope="col" style='color: white;font-family: Roboto Slab, serif;'>Nom</th>
+
+					</tr>
+				</thead>
+				<tbody>
+					{% for s in sessions %}
+						{% for u in s.users %}
+							<tr>
+
+								<td style="font-family: 'Roboto Slab', serif;color: #384158;">{{u.email}}</td>
+								<td style="font-family: 'Roboto Slab', serif;color: #384158;">{{u.name}}</td>
+
+							</tr>
+						{% endfor %}
+					{% endfor %}
+
+				</tbody>
+			</table>
+
+
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+
+	</div>
+
+</div></div		
+
+
+			{% endblock %}

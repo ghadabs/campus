@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        {% block stylesheets %}
+
+        {% endblock %}
+        <!-- FAVICONS ICON -->
+        <link rel="icon" href="{{ asset('images') }}" type="image/x-icon" />
+        <link rel="shortcut icon" type="{{ asset('images/campus.png')}}" href="images/campus.png" />
+        
+        <link rel="stylesheet" type="text/css" href="{{asset('css/style.css')}}">
+        <script src="{{asset('js/prefixfree.min.js')}}"></script>
+        <script src='http://codepen.io/assets/libs/fullpage/jquery.js'></script>
+    </head>
+    <body>
+        {% block body %}{% endblock %}
+        {% block javascripts %}
+
+    
+        {% endblock %}
+   
+    </body>
+</html>

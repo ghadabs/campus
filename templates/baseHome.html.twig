@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="description" content="Unicat project">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" type="text/css" href="{{asset('styles/bootstrap4/bootstrap.min.css')}}">
+		<link href="{{asset('plugins/font-awesome-4.7.0/css/font-awesome.min.css')}}" rel="stylesheet" type="text/css">
+		<link rel="stylesheet" type="text/css" href="{{asset('plugins/OwlCarousel2-2.2.1/owl.carousel.css')}}">
+		<link rel="stylesheet" type="text/css" href="{{asset('plugins/OwlCarousel2-2.2.1/owl.theme.default.css')}}">
+		<link rel="stylesheet" type="text/css" href="{{asset('plugins/OwlCarousel2-2.2.1/animate.css')}}">
+		<link rel="stylesheet" type="text/css" href="{{asset('styles/main_styles.css')}}">
+		<link rel="stylesheet" type="text/css" href="{{asset('styles/responsive.css')}}">
+		<link rel="stylesheet" type="text/css" href="{{asset('styles/courses.css')}}">
+		<link rel="stylesheet" type="text/css" href="{{asset('styles/courses_responsive.css')}}">
+		<link rel="stylesheet" type="text/css" href="{{asset('styles/course.css')}}">
+		<link rel="stylesheet" type="text/css" href="{{asset('styles/course_responsive.css')}}">
+
+
+		<title>
+			{% block title %}Welcome!
+			{% endblock %}
+		</title>
+		{% block stylesheets %}{% endblock %}
+		<!-- FAVICONS ICON -->
+		<link rel="icon" href="{{ asset('images') }}" type="image/x-icon"/>
+		<link rel="shortcut icon" type="{{ asset('images/campus.png')}}" href="{{ asset('images/campus.png')}}"/>
+
+
+	</head>
+	<body>
+		<!-- Header -->
+
+		<header
+			class="header">
+
+			<!-- Top Bar -->
+			<div class="top_bar" style="background-color:rgb(76, 224, 228) ; height:40px">
+				<div class="top_bar_container">
+					<div class="container">
+						<div class="row">
+							<div class="col">
+								<div class="top_bar_content d-flex flex-row align-items-center justify-content-start">
+									<ul class="top_bar_contact_list" style="width:100%">
+										<li>
+											<i class="fa fa-phone" aria-hidden="true"></i>
+											<div>+33 1 42 97 96 96</div>
+										</li>
+										<li>
+											<i class="fa fa-globe" aria-hidden="true"></i>
+											<div>
+												<a style="color:white" href="http://www.talan.tn/">www.talan.tn<a></div>
+												</li>
+												{% if is_granted("ROLE_ADMIN") %}
+													<li>
+														<div style="font-size:medium;margin-left: 300px">
+															<a href="{{path('proposer')}}" style="color:white" onmouseover="this.style.color='#384158'" onmouseout="this.style.color='white';">Proposer
+															</a>|
+															<a href="{{path('piloter')}}" style="color:white" onmouseover="this.style.color='#384158'" onmouseout="this.style.color='white';">Piloter</a>
+															|
+															<a href="{{path('admin')}}" style="color:white" onmouseover="this.style.color='#384158'" onmouseout="this.style.color='white';">Admin</a>
+														</div>
+													</li>
+												{% else %}
+													<li>
+														<div style="font-size:medium;margin-left: 300px">
+															<a href="{{path('proposer')}}" style="color:white" onmouseover="this.style.color='#384158'" onmouseout="this.style.color='white';">Proposer
+															</a>|
+															<a href="{{path('piloter')}}" style="color:white" onmouseover="this.style.color='#384158'" onmouseout="this.style.color='white';">Piloter</a>
+														</div>
+													</li>
+												{% endif %}
+												<li style="margin-bottom:2%"><img src="{{asset('uploads/photos/'~ user.image) }}" class="avatara"></li>
+												<li>
+													<div style="font-size: meduim">
+														<a href="#" style="color:white" onmouseover="this.style.color='#384158'" onmouseout="this.style.color='white';">{{user.name}}</a>
+													</div>
+												</li>
+
+											</ul>
+
+
+											<div class="top_bar_login ml-auto">
+												<div class="login_button text-center" style=" height:40px;">
+													<a class="text-center" href="{{ path('app_logout') }}">Logout</a>
+												</div>
+											</div>
+										</li>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Header Content -->
+				<div class="header_container">
+					<div class="container">
+						<div class="row">
+							<div class="col">
+								<div class="header_content d-flex flex-row align-items-center justify-content-start">
+									<div class="logo_container">
+										<a href="{{path('home')}}">
+											<div class="logo_text">Campus
+												<span style="color:rgb(76, 224, 228) ">Talan</span>
+											</div>
+										</a>
+									</div>
+									<nav class="main_nav_contaner ml-auto">
+										<ul class="main_nav">
+											<li class="navig">
+												<a href="{{path('home')}}">Tous</a>
+											</li>
+											<li class="navig">
+												<a href="{{path('session')}}">Sessions</a>
+											</li>
+											<li class="navig">
+												<a href="{{path('enLigne')}}">Formations en ligne</a>
+											</li>
+											<li class="navig">
+												<a href="{{path('presentielles')}}">Formations présentielles</a>
+											</li>
+
+										</ul>
+
+
+										<!-- Hamburger -->
+
+										<div class="hamburger menu_mm">
+											<i class="fa fa-bars menu_mm" aria-hidden="true"></i>
+										</div>
+									</nav>
+
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+			</header>
+
+			<!-- Menu -->
+
+			<div class="menu d-flex flex-column align-items-end justify-content-start text-right menu_mm trans_1030">
+				<div class="menu_close_container">
+					<div class="menu_close">
+						<div></div>
+						<div></div>
+					</div>
+				</div>
+				<div class="search">
+					<form action="#" class="header_search_form menu_mm">
+						<input type="search" class="search_input menu_mm" placeholder="Search" required="required">
+						<button class="header_search_button d-flex flex-column align-items-center justify-content-center menu_mm">
+							<i class="fa fa-search menu_mm" aria-hidden="true"></i>
+						</button>
+					</form>
+				</div>
+				<nav class="menu_nav">
+					<ul class="menu_mm">
+
+						<li style="margin-top:0.5%"><img src="{{asset('uploads/photos/'~ user.image) }}" class="avatara"></li>
+						{% if is_granted("ROLE_COLLABORATEUR")  %}
+							<li class="menu_mm">
+								<div style="font-size:medium;margin-left: 200px">
+									<a href "{{path('proposer')}}" class="menu_mm" href="#" style="color:#384158">Proposer
+									</a>
+									<a href="{{path('piloter')}}" style="color:#384158">Piloter</a>
+								</div>
+							</li>
+
+						{% elseif is_granted("ROLE_ADMIN") %}
+
+							<li>
+								<div style="font-size: medium;margin-left: 140px">
+									<a href="{{path('proposer')}}" style="color:#384158" onmouseover="this.style.color='rgb(76, 224, 228)'" onmouseout="this.style.color='#384158';">Proposer
+									</a><br><a href="{{path('piloter')}}" style="color:#384158" onmouseover="this.style.color='rgb(76, 224, 228)'" onmouseout="this.style.color='#384158';">Piloter</a><br><a href="{{path('admin')}}" style="color:#384158" onmouseover="this.style.color='rgb(76, 224, 228)'" onmouseout="this.style.color='#384158';">Admin
+									</a>
+								</div>
+							</li>
+						{% endif %}
+					</ul>
+					<hr>
+					<ul class="menu_mm">
+						<li class="menu_mm">
+							<a href="{{path('home')}}">Tous</a>
+						</li>
+						<li class="menu_mm">
+							<a href="{{path('session')}}">Sessions</a>
+						</li>
+						<li class="menu_mm">
+							<a href="{{path('enLigne')}}">Formations en ligne</a>
+						</li>
+						<li class="menu_mm">
+							<a href="{{path('presentielles')}}">Formations présentielles</a>
+						</li>
+						<li class="menu_mm">
+							<a href="{{ path('app_logout') }}">Logout</a>
+						</li>
+					</ul>
+
+				</nav>
+			</div>
+
+			{% block body %}{% endblock %}
+			<!-- Footer -->
+			<footer class="footer container-fluid" style="margin-top:2%">
+				<div class="footer_background" style="background-image:url({{asset('images/footer_background.png')}})"></div>
+				<div class="container">
+					<div class="row footer_row">
+						<div class="col">
+							<div class="footer_content">
+								<div class="row">
+
+									<div
+										class="col-lg-4 footer_col">
+
+										<!-- Footer About -->
+										<div class="footer_section footer_about">
+											<div class="footer_logo_container">
+												<a href="#">
+													<div class="footer_logo_text">Campus
+														<span>Talan</span>
+													</div>
+												</a>
+											</div>
+											<br>
+											<div class="newsletter_content text-lg-left text-center">
+												<div class="newsletter_title">Abonnez-vous</div>
+											</div>
+											<div class="newsletter_form_container ml-lg-auto" style="width:100%;margin-left:-20px">
+												<form action="#" id="newsletter_form" class="newsletter_form d-flex flex-row align-items-center justify-content-center" style="margin-left: -5.5%;">
+													<input type="email" class="newsletter_input" placeholder="Your Email" required="required">
+													<button type="submit" class="newsletter_button">Abonner</button>
+												</form>
+											</div>
+											<div class="footer_social">
+												<ul>
+													<li><a href="https://www.facebook.com/TalanTunisia"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+													<li><a href="https://www.linkedin.com/company/talan/"><i class="fa fa-linkedin" aria-hidden="true"></i></a></li>
+													<li><a href="https://www.instagram.com/talan.group/"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
+													<li><a href="https://twitter.com/talan_fr"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+												</ul>
+											</div>
+										</div>
+
+									</div>
+
+									<div
+										class="col-lg-4 footer_col">
+
+										<!-- Footer Contact -->
+										<div class="footer_section footer_contact">
+											<div class="footer_title">Contact Us</div>
+											<div class="footer_contact_info">
+												<ul>
+													<li><a style="color:#b5b8be;" href="mailto:recrutementtti@talan.tn">Email: recrutementtti@talan.tn</a></li>
+													<li><a style="color:#b5b8be;" href="tel:+33 1 42 97 9">Phone: +33 1 42 97 9</a></li>
+													<li><a style="color:#b5b8be;" href="https://goo.gl/maps/nj97Fitn58QEk8ro6">Adresse: Talan Tunisie International, 10 Rue de l'énergie solaire Impasse N°1 Charguia 1، Tunis 2035</a></li>
+												</ul>
+											</div>
+										</div>
+
+									</div>
+
+
+									<div
+										class="col-lg-4 footer_col clearfix">
+
+										<!-- Footer links -->
+										<div class="footer_section footer_contact">
+											<div class="footer_title">Mobile</div>
+											<div class="footer_mobile_content">
+												<div class="footer_image">
+													<a href="#"><img src="{{asset('images/mobile_1.png')}}" alt=""></a>
+												</div>
+												<div class="footer_image">
+													<a href="#"><img src="{{asset('images/mobile_2.png')}}" alt=""></a>
+												</div>
+											</div>
+										</div>
+
+									</div>
+
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="row copyright_row">
+						<div class="col">
+							<div class="copyright d-flex flex-lg-row flex-column align-items-center justify-content-start">
+								<div
+									class="cr_text">
+									<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+									Copyright &copy;<script>
+										document.write(new Date().getFullYear());
+									</script>
+									All rights reserved
+									<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</footer>
+
+
+		</body>
+
+
+		<script src="{{asset('js/jquery-3.2.1.min.js')}}"></script>
+		<script>
+			$(document).ready(function () {
+$('.navig.active').removeClass('active');
+$('a[href="' + location.pathname + '"]').closest('.navig').addClass('active');
+
+});
+$('.sub-menu ul').show();
+$(".sub-menu a").click(function () {
+$(this).parent(".sub-menu").children("ul").slideToggle("50");
+$(this).find(".right").toggleClass("fa-caret-up fa-caret-down");
+
+
+});
+
+$(document).ready(function () {
+
+
+var readURL = function (input) {
+if (input.files && input.files[0]) {
+var reader = new FileReader();
+
+reader.onload = function (e) {
+$('.avatar').attr('src', e.target.result);
+}
+
+reader.readAsDataURL(input.files[0]);
+}
+}
+
+
+$(".file-upload").on('change', function () {
+readURL(this);
+});
+});
+
+
+$(document).ready(function () {});
+
+
+$('#proposer_formation_gratuit').change(function () {
+if ($('#proposer_formation_gratuit').is(':checked') == true) {
+$('#proposer_formation_tarif').val('Gratuit').prop('disabled', true);
+console.log('checked');
+} else {
+$('#proposer_formation_tarif').val('0').prop('disabled', false);
+console.log('unchecked');
+}
+
+});
+
+
+$(document).ready(function () {
+$(".add").click(function () {
+$(".cloneDefault").clone(true).insertBefore(".fm > div:last-child");
+$(".fm > .cloneDefault").removeClass("cloneDefault");
+return false;
+});
+
+$(document).on('click', '.remove', function () {
+$(this).parent().remove();
+});
+});
+
+
+		</script>
+
+		{# Voici le script de proposer : #}
+			<script type="text/javascript"> $(document).ready(function () { // On récupère la balise <div> en question qui contient l'attribut « data-prototype » qui nous intéresse.
+var $container = $('div#proposer_formation_sessions');
+
+// On définit un compteur unique pour nommer les champs qu'on va ajouter dynamiquement
+var index = $container.find(':input').length;
+
+// On ajoute un nouveau champ à chaque clic sur le lien d'ajout.
+$('#add_category').click(function (e) {
+addCategory($container);
+console.log($container)
+
+e.preventDefault(); // évite qu'un # apparaisse dans l'URL
+return false;
+});
+
+// On ajoute un premier champ automatiquement s'il n'en existe pas déjà un (cas d'une nouvelle annonce par exemple).
+if (index == 0) {
+addCategory($container);
+} else { // S'il existe déjà des catégories, on ajoute un lien de suppression pour chacune d'entre elles
+$container.children('div').each(function () {
+addDeleteLink($(this));
+
+});
+}
+
+var $container1 = $('div#proposer_formation_equipes');
+
+// On définit un compteur unique pour nommer les champs qu'on va ajouter dynamiquement
+var index = $container1.children.length ;
+var i=$container.length-1 ;
+
+
+// On ajoute un nouveau champ à chaque clic sur le lien d'ajout.
+$('#add').click(function (e) {
+	
+addEquipe($container1);
+i++;
+console.log($container1)
+console.log(i)
+e.preventDefault(); // évite qu'un # apparaisse dans l'URL
+return false;
+});
+
+// On ajoute un premier champ automatiquement s'il n'en existe pas déjà un (cas d'une nouvelle annonce par exemple).
+if (index == 0) {
+
+addEquipe($container1);
+
+} else { 
+	// S'il existe déjà des encadrants, on ajoute un lien de suppression pour chacune d'entre eux
+$container1.children('div').each(function () {
+	
+addDelete($(this));
+i++;
+
+
+
+
+
+});
+
+}
+
+
+// La fonction qui ajoute un formulaire CategoryType
+function addCategory($container) {
+// Dans le contenu de l'attribut « data-prototype », on remplace :
+// - le texte "__name__label__" qu'il contient par le label du champ
+// - le texte "__name__" qu'il contient par le numéro du champ
+var template = $container.attr('data-prototype').replace(/__name__/g, index);
+
+// On crée un objet jquery qui contient ce template
+var $prototype = $(template);
+
+// On ajoute au prototype un lien pour pouvoir supprimer la catégorie
+addDeleteLink($prototype);
+
+
+// On ajoute le prototype modifié à la fin de la balise <div>
+$container.append($prototype)
+
+// Enfin, on incrémente le compteur pour que le prochain ajout se fasse avec un autre numéro
+index++;
+
+}
+
+function addEquipe($container) {
+// Dans le contenu de l'attribut « data-prototype », on remplace :
+// - le texte "__name__label__" qu'il contient par le label du champ
+// - le texte "__name__" qu'il contient par le numéro du champ
+var template = $container.attr('data-prototype').replace(/__name__/g, index);
+
+
+// On crée un objet jquery qui contient ce template
+var $prototype = $(template);
+
+// On ajoute le prototype modifié à la fin de la balise <div>
+$container.append($prototype);
+
+
+// On ajoute au prototype un lien pour pouvoir supprimer la catégorie
+addDelete($prototype);
+
+// Enfin, on incrémente le compteur pour que le prochain ajout se fasse avec un autre numéro
+index++;
+// i++;
+}
+
+// La fonction qui ajoute un lien de suppression d'une catégorie
+function addDeleteLink($prototype) { // Création du lien
+var $deleteLink = $('<a href="#" class="btn btn-danger " style="float: right;"><i class="fa fa-minus" aria-hidden="true"></i></a>');
+
+// Ajout du lien
+$prototype.append($deleteLink);
+
+// Ajout du listener sur le clic du lien pour effectivement supprimer la catégorie
+$deleteLink.click(function (e) {
+// $prototype.slideUp(1000, function () {
+            $prototype.remove();
+        // })
+
+e.preventDefault(); // évite qu'un # apparaisse dans l'URL
+return false;
+});
+}
+
+// La fonction qui ajoute un lien de suppression d'une catégorie
+function addDelete($prototype) { // Création du lien
+
+var $deleteLink = $('<a href="#" class="btn btn-danger second" style="float: right;"><i class="fa fa-minus" aria-hidden="true"></i></a>');
+var $img = $('<img src=" {{ asset('images/reader.png') }}"  class="avata img-thumbnail">').attr('required',false);
+
+$img.attr("id", "id_" + i);
+$prototype.append($img)
+$m=$("#id_" + i)
+
+// Ajout du lien
+$prototype.append($deleteLink);
+var readURL = function (input) {
+if (input.files && input.files[0]) {
+var reader = new FileReader();
+
+reader.onload = function (e) {
+$img.attr('src', e.target.result);
+
+}
+
+reader.readAsDataURL(input.files[0]);
+}
+}
+
+
+$(".upload").on('change', function () {
+readURL(this);
+
+});
+
+console.log('#id_'+ i)
+
+// Ajout du listener sur le clic du lien pour effectivement supprimer la catégorie
+$deleteLink.click(function (e) {
+// $prototype.slideUp(1000, function () {
+            $prototype.remove();
+			i--;
+			console.log(i)
+        // })
+e.preventDefault(); // évite qu'un # apparaisse dans l'URL
+return false;
+});
+// i++;
+}
+});
+		</script>
+
+		<script src="{{asset('styles/bootstrap4/popper.js')}}"></script>
+		<script src="{{asset('styles/bootstrap4/bootstrap.min.js')}}"></script>
+		<script src="{{asset('plugins/greensock/TweenMax.min.js')}}"></script>
+		<script src="{{asset('plugins/greensock/TimelineMax.min.js')}}"></script>
+		<script src="{{asset('plugins/scrollmagic/ScrollMagic.min.js')}}"></script>
+		<script src="{{asset('plugins/greensock/animation.gsap.min.js')}}"></script>
+		<script src="{{asset('plugins/greensock/ScrollToPlugin.min.js')}}"></script>
+		<script src="{{asset('plugins/OwlCarousel2-2.2.1/owl.carousel.js')}}"></script>
+		<script src="{{asset('plugins/easing/easing.js')}}"></script>
+		<script src="{{asset('plugins/parallax-js-master/parallax.min.js')}}"></script>
+		<script src="{{asset('js/custom.js')}}"></script>
+		<script src="{{asset('js/course.js')}}"></script>
+	</body>
+</html>

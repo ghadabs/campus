@@ -1,0 +1,17 @@
+								
+									{{ form_start(form, {attr: {class: 'home_search_form d-flex flex-lg-row flex-column align-items-center justify-content-between',id:"home_search_form_1"}}) }}
+										
+										<div class="d-flex flex-row align-items-center justify-content-start" style="margin-top:2.5%"> 
+											{{ form_widget(form.q) }}
+											{{ form_widget(form.categories, {'attr': {'class': 'courses_search_select courses_search_input'}}) }}	
+											{{ form_widget(form.niveaux, {'attr': {'class': 'courses_search_select courses_search_input'}}) }}
+											{{ form_widget(form.langues, {'attr': {'class': 'courses_search_select courses_search_input'}}) }}	
+											<label style="margin-top:1%;width:12%">Gratuit</label>	
+											{{ form_widget(form.gratuit) }}
+										</div>
+
+											<button type="submit" class="home_search_button">Recherche</button>
+										
+										
+										{{ form_end(form) }}
+									

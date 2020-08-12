@@ -1,0 +1,115 @@
+{% extends 'baseHome.html.twig' %}
+
+{% block title %}Admin
+{% endblock %}
+
+{% block body %}
+	<!-- Home -->
+
+	<div class="admin">
+		<div class="breadcrumbs_container">
+			<div class="container">
+				<div class="row">
+					<div class="col">
+						<div class="breadcrumbs">
+							<ul>
+								<li>
+									<a href="{{path('home')}}">Accueil</a>
+								</li>
+								<li>Admin</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	{%for message in app.flashes('notice')%}
+		<div class="alert alert-success text-center">
+			{{message}}
+		</div>
+		{%endfor%}
+	</div>
+
+	<div class="container">
+		<div class="row" style="margin-top: 5%;">
+			<div class="col-12">
+				<div
+					class="vertical-tab" role="tabpanel">
+					<!-- Nav tabs -->
+					<ul class="nav nav-pills" >
+						<li class="nav-item">
+							<a class="nav-link active" style="backgound-color:#4ce0e4" href="{{path('admin')}}"  style="width: 100%;">Formations</a>
+						</li>
+						<li role="presentation" class="nav-item">
+							<a class="nav-link"  href="{{path('adminCollab')}}">collaborateurs</a>
+						</li>
+					</ul>
+					<!-- Tab panes -->
+					<div >
+						<div  class="tab-pane fade show active" id="Section1" style="margin-left: 2%;">
+							<h3>Les Formations</h3>
+
+							<div class="span5">
+								<table class="table table-striped table-condensed">
+									<thead>
+										<tr>
+											<th>Titre</th>
+											<th>Date de création</th>
+											<th>Publié par</th>
+											<th>Status</th>
+											<th></th>
+											<th></th>
+										</tr>
+									</thead>
+									<tbody>
+									
+										{% for f in formations %}
+										{% if f.statut != 'brouillon' %}
+											<tr>
+												<td>
+													<a style="color:#555" href="{{path('detail',{ 'id': f.id })}}">{{f.title}}</a>
+												</td>
+												<td>{{f.createdAt.modify("-1 hour")| ago}}</td>
+												<td>{{f.user.name}}</td>
+												<td>
+													<span class="label label-success">{{f.statut}}</span>
+												</td>
+												{% if f.statut != 'validée' and f.statut != 'refusée' %}
+													<td>
+														<button type="submit" class="btn btn-outline-info">
+															<a href="{{path('Valider',{ 'id': f.id })}}" style="color:rgb(76, 224, 228)" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgb(76, 224, 228)';">Valider</a>
+														</button>
+													</td>
+													<td>
+														<button type="submit" class="btn btn-outline-danger">
+															<a href="{{path('refuser',{ 'id': f.id })}}" style="color:#dc3545" onmouseover="this.style.color='white'" onmouseout="this.style.color='#dc3545';">Refuser</a>
+														</button>
+													</td>
+												{% elseif f.statut == 'refusée'%}
+													<td>
+														<button type="submit" class="btn btn-outline-danger">
+															<a href="{{path('deleteFormation',{ 'id': f.id })}}" style="color:#dc3545" onmouseover="this.style.color='white'" onmouseout="this.style.color='#dc3545';">Supprimer</a>
+														</button>
+													</td>
+													<td></td>
+												{% else %}
+													<td></td>
+													<td></td>
+												{% endif %}
+											</tr>
+											{% endif%}
+										{% endfor %}
+									</tbody>
+								</table>
+							</div>
+
+						</div>
+					</div>
+					</div>
+						
+				</div>
+			</div>
+		</div>
+
+	{% endblock %}

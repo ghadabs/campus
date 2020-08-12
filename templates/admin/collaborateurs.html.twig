@@ -1,0 +1,123 @@
+{% extends 'baseHome.html.twig' %}
+
+{% block title %}Admin
+{% endblock %}
+
+{% block body %}
+
+	<!-- Home -->
+
+	<div class="admin">
+		<div class="breadcrumbs_container">
+			<div class="container">
+				<div class="row">
+					<div class="col">
+						<div class="breadcrumbs">
+							<ul>
+								<li>
+									<a href="{{path('home')}}">Accueil</a>
+								</li>
+								<li>Admin</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	{%for message in app.flashes('notice')%}
+		<div class="alert alert-success text-center">
+			{{message}}
+		</div>
+		{%endfor%}
+	</div>
+	<div class="container">
+		<div class="row" style="margin-top: 5%;">
+			<div class="col-12">
+				<div
+					class="vertical-tab" role="tabpanel">
+					<!-- Nav tabs -->
+					<ul class="nav nav-pills">
+						<li class="nav-item">
+							<a class="nav-link " style="backgound-color:#4ce0e4" href="{{path('admin')}}" style="width: 100%;">Formations</a>
+						</li>
+						<li role="presentation" class="nav-item">
+							<a class="nav-link active" href="{{path('adminCollab')}}">collaborateurs</a>
+						</li>
+					</ul>
+					<div class="row" style="margin-left: 2%;">
+						<div class="col">
+							<h3>collaborateurs</h3>
+						</div>
+
+					</div>
+					<div class="courses">
+						<div class="container">
+							<div
+								class="row">
+
+								<!-- Courses Main Content -->
+								<div class="col">
+									<div class="courses_container">
+										<div class="row courses_row">
+											{% for c in collab %}
+
+												{# {% for role in c.roles if c.roles is empty or role != 'ROLE_ADMIN' %} #}
+												{# {% if role != 'ROLE_ADMIN' %} #}
+												<!-- Course -->
+													<div class="col-lg-6 course_col"> <div class="course">
+														<div class="course_image"><img src="{{asset('uploads/photos/'~ c.image) }}" alt=""></div>
+														<div class="course_body">
+															<h3 class="course_title">
+																<a href="course.html">{{c.name}}</a>
+															</h3>
+															<div class="course_teacher">{{c.email}}</div>
+														</div>
+														<div class="course_footer">
+															<div class="course_footer_content d-flex flex-row align-items-center justify-content-start">
+																<div class="course_info">
+																	{% if c.statut == 'validé'%}
+																		<i class="fa fa-check" aria-hidden="true"></i>
+																	{% else %}
+																		<i class="fa fa-spinner" aria-hidden="true"></i>
+																	{% endif %}
+																	<span>{{c.statut}}</span>
+																</div>
+																<div class="course_info">
+
+																	<span></span>
+																</div>
+																<div class="course_price ml-auto"></div>
+																{% if c.statut != 'validé'%}
+																	<button type="submit" class="btn btn-outline-info">
+																		<a href="{{path('Validation',{ 'id': c.id })}}" style="color:rgb(76, 224, 228)" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgb(76, 224, 228)';">Valider</a>
+																	</button>
+																{% endif %}
+															</div>
+														</div>
+
+													</div>
+
+												</div>
+
+												{# {%endif%} #}
+												{# {%endfor%} #}
+												{%endfor%}
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+									
+									<div class="navigation float-right" style="margin-top:-6%">
+										{{ knp_pagination_render(pagination) }}
+									</div>
+
+			</div>
+		</div>
+	</div>
+{% endblock %}
