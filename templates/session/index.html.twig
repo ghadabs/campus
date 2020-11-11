@@ -1,6 +1,6 @@
 {% extends 'baseHome.html.twig' %}
 
-{% block title %}Hello SessionController!
+{% block title %}Sessions
 {% endblock %}
 
 {% block body %}
@@ -56,7 +56,7 @@
 
 									<!-- Description -->
 									{% for s in session %}
-										<div class="tab_panel active">
+										<div class="tab_panel active" >
 											<p>Prévue le :</p>
 											<div class="row">
 
@@ -75,7 +75,9 @@
 												</div>
 												<div class="tab_panel_content col" style="text-align:center">
 													<div class="tab_panel_text">
-														<p>{{s.formation.title}}</p>
+														<h5>
+															<a style="color:#384158;" href="{{path('detail',{ 'id': s.formation.id })}}">{{s.formation.title}}</a>
+														</h5>
 														{% if s.dateDeb|date('d') == s.dateFin|date('d') %}
 															<h5>Durée:
 																{{s.dateDeb|date('H:i')}}
@@ -95,12 +97,13 @@
 														<h5>Nombre de places disponibles:
 															<span style="color: #76777a;">{{s.nbrePlaces}}</h5>
 															<p>{{s.adresse}}</p>
-															{% if is_granted('ROLE_ADMIN') or s.formation in app.user.formation %}
-																<button type="submit" class="btn btn-outline-info" style="color:rgb(76, 224, 228);float: right" data-toggle="modal" data-target="#exampleModal">
+															{# {% if is_granted('ROLE_ADMIN') or s.formation in app.user.formation %}
+																<button type="submit" class="btn btn-outline-info" style="color:rgb(76, 224, 228);float: right;    margin-right: 3%;
+																	    margin-bottom: 3%;" data-toggle="modal" data-target="#exampleModal">
 																	<a style="color:rgb(76, 224, 228)" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgb(76, 224, 228)';">
 																		liste des inscrits</a>
 																</button>
-															{% endif %}
+															{% endif %} #}
 															{% if s.nbrePlaces > 0 %}
 
 																<button type="submit" class="btn btn-outline-info" style="color:rgb(76, 224, 228);float: right;margin-right:1%" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgb(76, 224, 228)';">
@@ -118,17 +121,18 @@
 														</div>
 													</div>
 												</div>
-												<br>
+												
+												
 
-											</div>
+										
 
 
-										</div>
-									
+										
+<br>
 									{% endfor %}
 								</div>
 							</div>
-
+</div>	</div>
 						</div>
 
 
@@ -190,9 +194,4 @@
 
 	</div>
 
-</div></div></div>{% endblock %}
-{% block javascripts %}{{parent()}}
-<script>
-$('.js-datepicker').datepicker({format: 'yyyy.MM.dd'});
-
-</script>{% endblock %}
+</div></div></div>{% endblock %}{% block javascripts %}{{parent()}}<script>$('.js-datepicker').datepicker({format: 'yyyy.MM.dd'});</script>{% endblock %}

@@ -74,7 +74,7 @@
 												<li style="margin-bottom:2%"><img src="{{asset('uploads/photos/'~ user.image) }}" class="avatara"></li>
 												<li>
 													<div style="font-size: meduim">
-														<a href="#" style="color:white" onmouseover="this.style.color='#384158'" onmouseout="this.style.color='white';">{{user.name}}</a>
+														<h6 style=" margin-left: -10%;font-size: inherit;">{{user.name}}</h6>
 													</div>
 												</li>
 
@@ -311,10 +311,12 @@
 
 		</body>
 
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> 
 
-		<script src="{{asset('js/jquery-3.2.1.min.js')}}"></script>
-		<script>
-			$(document).ready(function () {
+<script src="{{asset('js/jquery-3.2.1.min.js')}}"></script>
+<script>
+	$(document).ready(function () {
+
 $('.navig.active').removeClass('active');
 $('a[href="' + location.pathname + '"]').closest('.navig').addClass('active');
 
@@ -364,23 +366,23 @@ console.log('unchecked');
 });
 
 
-$(document).ready(function () {
-$(".add").click(function () {
-$(".cloneDefault").clone(true).insertBefore(".fm > div:last-child");
-$(".fm > .cloneDefault").removeClass("cloneDefault");
-return false;
-});
+// $(document).ready(function () {
+// $(".add").click(function () {
+// $(".cloneDefault").clone(true).insertBefore(".fm > div:last-child");
+// $(".fm > .cloneDefault").removeClass("cloneDefault");
+// return false;
+// });
 
-$(document).on('click', '.remove', function () {
-$(this).parent().remove();
-});
-});
+// $(document).on('click', '.remove', function () {
+// $(this).parent().remove();
+// });
+// });
 
 
 		</script>
 
 		{# Voici le script de proposer : #}
-			<script type="text/javascript"> $(document).ready(function () { // On récupère la balise <div> en question qui contient l'attribut « data-prototype » qui nous intéresse.
+<script type="text/javascript"> $(document).ready(function () { // On récupère la balise <div> en question qui contient l'attribut « data-prototype » qui nous intéresse.
 var $container = $('div#proposer_formation_sessions');
 
 // On définit un compteur unique pour nommer les champs qu'on va ajouter dynamiquement
@@ -408,17 +410,17 @@ addDeleteLink($(this));
 var $container1 = $('div#proposer_formation_equipes');
 
 // On définit un compteur unique pour nommer les champs qu'on va ajouter dynamiquement
-var index = $container1.children.length ;
-var i=$container.length-1 ;
+var index = $container1.find(':input').length ;
 
+// var imgs=[];
 
 // On ajoute un nouveau champ à chaque clic sur le lien d'ajout.
 $('#add').click(function (e) {
 	
 addEquipe($container1);
-i++;
+
 console.log($container1)
-console.log(i)
+// console.log(i)
 e.preventDefault(); // évite qu'un # apparaisse dans l'URL
 return false;
 });
@@ -432,8 +434,8 @@ addEquipe($container1);
 	// S'il existe déjà des encadrants, on ajoute un lien de suppression pour chacune d'entre eux
 $container1.children('div').each(function () {
 	
-addDelete($(this));
-i++;
+addDelete($(this),index);
+
 
 
 
@@ -473,6 +475,7 @@ function addEquipe($container) {
 var template = $container.attr('data-prototype').replace(/__name__/g, index);
 
 
+
 // On crée un objet jquery qui contient ce template
 var $prototype = $(template);
 
@@ -481,16 +484,17 @@ $container.append($prototype);
 
 
 // On ajoute au prototype un lien pour pouvoir supprimer la catégorie
-addDelete($prototype);
+addDelete($prototype,index);
+
 
 // Enfin, on incrémente le compteur pour que le prochain ajout se fasse avec un autre numéro
 index++;
-// i++;
+
 }
 
 // La fonction qui ajoute un lien de suppression d'une catégorie
 function addDeleteLink($prototype) { // Création du lien
-var $deleteLink = $('<a href="#" class="btn btn-danger " style="float: right;"><i class="fa fa-minus" aria-hidden="true"></i></a>');
+var $deleteLink = $('<a href="#" class="btn btn-danger " style="float: right;    border-radius: 20px; margin-right: -2.3%;"><i class="fa fa-minus" aria-hidden="true"></i></a>');
 
 // Ajout du lien
 $prototype.append($deleteLink);
@@ -507,52 +511,189 @@ return false;
 }
 
 // La fonction qui ajoute un lien de suppression d'une catégorie
-function addDelete($prototype) { // Création du lien
+function addDelete($prototype ,index) { // Création du lien
 
-var $deleteLink = $('<a href="#" class="btn btn-danger second" style="float: right;"><i class="fa fa-minus" aria-hidden="true"></i></a>');
-var $img = $('<img src=" {{ asset('images/reader.png') }}"  class="avata img-thumbnail">').attr('required',false);
+var $deleteLink = $('<a href="#" class="btn btn-danger second" style="border-radius: 20px;margin-right: -2.3%;margin-top: 2.5%;float: right;"><i class="fa fa-minus" aria-hidden="true"></i></a>');
+var $result=$('<ul id="r"> </ul>')
+var $search=$('<div class="field" style="margin-top: 8%;padding-top: 1%;background: #ebebeb;padding-bottom: 2%;padding-left: 17%;"><label>Recherche par mail</label><input id="search'+index+'" type="search" class="form-control" style="margin-left: 34%; margin-top: -6%;"></div>')
 
-$img.attr("id", "id_" + i);
-$prototype.append($img)
-$m=$("#id_" + i)
+$prototype.before($search)
 
-// Ajout du lien
+
 $prototype.append($deleteLink);
-var readURL = function (input) {
-if (input.files && input.files[0]) {
-var reader = new FileReader();
 
-reader.onload = function (e) {
-$img.attr('src', e.target.result);
+	var $name=$('#proposer_formation_equipes_'+index+'_name');
+	var $image=$('#proposer_formation_equipes_'+index+'_image');
+	var $fonction=$('#proposer_formation_equipes_'+index+'_fonction');
+	var $entity=$('#proposer_formation_equipes_'+index+'_entite');
+	var $description=$('#proposer_formation_equipes_'+index+'_description');
+	// var $searching=$('#search')
+    var searchRequest = null;
+    $('#search'+index).keyup(function() {
+        var minlength = 1;
+        var that = this;
+        var value = $(this).val();
+        var entitySelector = $('#proposer_formation_equipes_'+index).html('');
+		entitySelector.append('<div><label for="proposer_formation_equipes_'+index+'_name">Nom et prénom</label><input type="text" id="proposer_formation_equipes_'+index+'_name" name="proposer_formation[equipes]['+index+'][name]" placeholder="" class="form-control" style="width: 92%;pointer-events: none;" ></div>');
+		entitySelector.append('<div><label for="proposer_formation_equipes_'+index+'_image">Image</label><input type="file" id="proposer_formation_equipes_'+index+'_image" name="proposer_formation[equipes]['+index+'][image]" placeholder="" style="width: 92%;pointer-events: none;" ></div>');
+		entitySelector.append('<div><label for="proposer_formation_equipes_'+index+'_fonction">Fonction</label><input type="text" id="proposer_formation_equipes_'+index+'_fonction" name="proposer_formation[equipes]['+index+'][fonction]" placeholder="" class="form-control" style="width: 92%;pointer-events: none;" ></div>');
+		entitySelector.append('<div><label for="proposer_formation_equipes_'+index+'_entite">Entité</label><input type="text" id="proposer_formation_equipes_'+index+'_entite" name="proposer_formation[equipes]['+index+'][entite]" placeholder="" class="form-control" style="width: 92%;pointer-events: none;" ></div>');									    
+		entitySelector.append('<div><label for="proposer_formation_equipes_'+index+'_description">Description</label><textarea id="proposer_formation_equipes_'+index+'_description" name="proposer_formation[equipes]['+index+'][description]" placeholder="" class="form-control" style="width: 92%;pointer-events: none;"></textarea></div>');										
+        if (value.length >= minlength ) {
+            if (searchRequest != null)
+				searchRequest.abort();
+				//  var $form = $(this).closest('form');
+				// Simulate form data, but only include the selected sport value.
+				// var data = {};
+  				// data[$("#search"+index).attr('name')] = $("#search"+index).val();
+            	searchRequest = $.ajax({
+                type: "GET",
+                url: '{{path('ajax_search')}}',
+                data: {
+                    'q' : value,
+					
+                },
+			
+                dataType: "text",
+                success: function(msg){
+                    //we need to check if the value is the same
+                    if (value==$(that).val()) {
+                        var result = JSON.parse(msg);
+                        $.each(result, function(key, arr) {
+                            $.each(arr, function(id, value) {
+                                if (key == 'equipe') {
+                                    if (id != 'error') {
+										$('#proposer_formation_equipes_'+index+'_name').val(value[1])
+										
+										$('#proposer_formation_equipes_'+index+'_fonction').val(value[3])
+										$('#proposer_formation_equipes_'+index+'_entite').val(value[4])
+										$('#proposer_formation_equipes_'+index+'_description').val(value[5])
+										// $('#proposer_formation_equipes_'+index+'_image').val(value[2])
+										// $name.replaceWith('<input id="proposer_formation_equipes_'+index+'_name" name="proposer_formation[equipes]['+index+'][name]" class="form-control" style="width:92%;pointer-events: none;"   value="' +value[1]+ '">');
+										$('#proposer_formation_equipes_'+index+'_image').replaceWith('<input id="proposer_formation_equipes_'+index+'_image" name="proposer_formation[equipes]['+index+'][image]" type="file" style="width:92%;pointer-events: none;" class="upload" value="uploads/photos/' +value[2]+'">');
+										// $fonction.replaceWith('<input id="proposer_formation_equipes_'+index+'_fonction" name="proposer_formation[equipes]['+index+'][fonction]" style="width:92%;pointer-events: none;" class="form-control "value="' +value[3]+ '">');
+										// $entity.replaceWith('<input id="proposer_formation_equipes_'+index+'_entite" name="proposer_formation[equipes]['+index+'][entite]" style="width:92%;pointer-events: none;" class="form-control "value="' +value[4]+ '">');									
+										// $description.replaceWith('<textarea id="proposer_formation_equipes_'+index+'_description" name="proposer_formation[equipes]['+index+'][description]" style="width:92%;pointer-events: none;" class="form-control "  >'+value[5]+'</textarea>');
+									} else {
+                                        entitySelector.append('<div class="errorLi">'+value+'</div>');
+                                    }
+                                }
+                            });
+                        });
+                    }
+                 }
+            });
+        }
+    });
 
-}
 
-reader.readAsDataURL(input.files[0]);
-}
-}
-
-
-$(".upload").on('change', function () {
-readURL(this);
-
-});
-
-console.log('#id_'+ i)
 
 // Ajout du listener sur le clic du lien pour effectivement supprimer la catégorie
 $deleteLink.click(function (e) {
-// $prototype.slideUp(1000, function () {
+
             $prototype.remove();
-			i--;
-			console.log(i)
-        // })
+			$search.remove();
+			
+			
+		
+     
 e.preventDefault(); // évite qu'un # apparaisse dans l'URL
 return false;
 });
-// i++;
+
+
+
 }
+
+
 });
-		</script>
+		
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script type="text/javascript">
+
+
+// function onClickSession(event){
+// 	event.preventDefault();
+// 	const url=this.href;
+	
+// 	axios.get(url).then(function(response,){
+// 		console.log(response)
+// 		var entitySelector = $('#sessions').html('');
+// 		for(var i=0; i<response.data.length ;i++){
+// 			entitySelector.append('<div class="tab_panel active" style="width: 547%;"><p>Prévue le :</p><div class="row"><div class="col row" style="max-width:fit-content;"><div class="col" style="max-width:min-content;"><div class="tab_panel_title" id="deb">'+response.data[i].date_deb+'</div></div><div class="row"><div class="col"><div class="tab_panel_title" id="mois">'+response.data[i].date_fin+'</div></div></div></div><div class="tab_panel_content col"><div class="tab_panel_text"><h5>Nombre de places disponibles:<span style="color: #76777a;">'+response.data[i].nbrePlaces+'</h5><p>'+response.data[i].adresse+'</p><br></div></div></div></div><br>')
+// 		}
+		
+// })
+// }
+// document.querySelectorAll('a.ss').forEach(function(link){
+// 	link.addEventListener('click',onClickSession);
+// })
+
+
+
+// // var entitySelector = $('#sessions').html('');
+//   $( ".ss" ).on( "click", function(e) {
+//        var $cel=$('<tr><td ><div id="sessions"></div><td></tr>');
+// 	   document.querySelectorAll('.table.table-striped.table-condensed > tbody>tr').forEach(function(){
+// 	    $('.table.table-striped.table-condensed > tbody> tr').after($cel)})
+//         e.preventDefault();
+
+//         var $link = $(e.currentTarget);
+
+//         $.ajax({method:"GET", url: $link.attr('href')}).done(function(data){
+// 			console.log(data)
+// 		for(var i=0;i<data.s.length;i++){	
+//           $('#sessions').append(' <div class="tab_panel active" style="width: 547%;"><div class="row"><div class="col">	<div class="tab_panel_content "><div class="tab_panel_text"><h5>A partir:</h5>'+data.s[i].date_deb.date+'</div></div><div class="tab_panel_content "><div class="tab_panel_text"><h5>Jusqu a</h5>'+data.s[i].date_fin.date+'</div></div></div><div class="col"><div class="tab_panel_content " style=""><div class="tab_panel_text"><h5>Nombre de places disponibles:<span style="color: #76777a;" id="deb"></h5>'+data.s[i].nbrePlaces+'</div><div class="tab_panel_text"><h5>Adresse:<span style="color: #76777a;"></h5><p>'+data.s[i].adresse+'</p><br></div></div></div></div></div>');
+// 		}
+// 		});
+//       });
+//     });
+
+
+	// var $searching=$('#search')
+    
+   
+        function enabledChange(id, changePath) {
+     
+        var entitySelector = $('#inscrits').html('');
+		entitySelector.append('<table class="table" id="inscrits"><thead style="background-color:white"><tr>	<th scope="col" style="color: #76777a;font-family: Roboto Slab, serif;">Email</th><th scope="col" style="color: #76777a;font-family: Roboto Slab, serif;">Nom</th></tr></thead><tbody><tr>')
+                $.ajax({
+                type: "GET",
+                url: changePath,
+				async: true,
+				data: { },
+				 
+                success: function(msg){
+                    //we need to check if the value is the same
+                  
+                        var result = JSON.parse(msg);
+                        $.each(result, function(key, arr) {
+                            $.each(arr, function(id, value) {
+                                if (key == 'users') {
+                                    if (id != 'error') {
+										console.log(value)
+							
+										entitySelector.append('<tr><td id ="name"style="font-family: Roboto Slab, serif;color: #384158;">'+value[0]+'</td><td id ="email"style="font-family: Roboto Slab serif;color: #384158;">'+value[1]+'</td></tr>');
+								
+										
+										entitySelector.append('</tbody></table>')
+										
+									} else {
+                                        entitySelector.append('<div class="errorLi">'+value+'</div>');
+                                    }
+                                }
+                            });
+                        });
+				}
+                 })
+            
+		}  
+    
+
+</script>
+
 
 		<script src="{{asset('styles/bootstrap4/popper.js')}}"></script>
 		<script src="{{asset('styles/bootstrap4/bootstrap.min.js')}}"></script>
@@ -566,5 +707,6 @@ return false;
 		<script src="{{asset('plugins/parallax-js-master/parallax.min.js')}}"></script>
 		<script src="{{asset('js/custom.js')}}"></script>
 		<script src="{{asset('js/course.js')}}"></script>
+		<script src="{{asset('js/liveSearch.js')}}"></script>
 	</body>
 </html>

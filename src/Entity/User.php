@@ -9,7 +9,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @ORM\Table(name="User")
+ * 
  */
 class User implements UserInterface
 {
@@ -21,7 +23,7 @@ class User implements UserInterface
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=180, unique=true)
+     * @ORM\Column(type="string", length=180, unique=true, nullable=true)
      */
     private $email;
 
@@ -32,7 +34,7 @@ class User implements UserInterface
 
     /**
      * @var string The hashed password
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      */
     private $password;
 
@@ -47,7 +49,7 @@ class User implements UserInterface
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255,nullable=true)
      */
     private $image;
 
@@ -57,20 +59,44 @@ class User implements UserInterface
     private $created_at;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255,nullable=true)
      */
     private $statut;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Session::class, mappedBy="users")
+     * @ORM\ManyToMany(targetEntity=Session::class, mappedBy="users",orphanRemoval=true)
+     * @ORM\JoinColumn(name="session_id", referencedColumnName="session_id")
      */
     private $sessions;
+
+
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $fonction;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $entite;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $description;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Formation::class, mappedBy="equipes", orphanRemoval=true)
+     */
+    private $formations;
 
     public function __construct()
     {   
         $this->created_at = new \DateTime();
         //$this->formation = new ArrayCollection();
         $this->sessions = new ArrayCollection();
+        $this->formations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -161,6 +187,8 @@ class User implements UserInterface
     {
         if (!$this->formation->contains($formation)) {
             $this->formation[] = $formation;
+            $formation->setUser($this);
+        }else{
             $formation->setUser($this);
         }
 
@@ -254,5 +282,51 @@ class User implements UserInterface
         }
 
         return $this;
+    }
+
+
+
+    public function getFonction(): ?string
+    {
+        return $this->fonction;
+    }
+
+    public function setFonction(string $fonction): self
+    {
+        $this->fonction = $fonction;
+
+        return $this;
+    }
+
+    public function getEntite(): ?string
+    {
+        return $this->entite;
+    }
+
+    public function setEntite(string $entite): self
+    {
+        $this->entite = $entite;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Formation[]
+     */
+    public function getFormations(): Collection
+    {
+        return $this->formations;
     }
 }

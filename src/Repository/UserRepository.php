@@ -3,6 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\User;
+use App\Entity\Formation;
+use App\Entity\Session;
 use App\Data\SearchData;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -48,24 +50,58 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         return $this->createQueryBuilder('u')
         ->select('u') 
         ->where('u.roles NOT LIKE :role') 
+        ->andWhere('u.statut NOT LIKE :statut') 
         ->setParameter('role', '%"'.'ROLE_ADMIN'.'"%') 
+        ->setParameter('statut', 'rien') 
         ->getQuery()
         ->getResult();
         ;
     }
-    
-
-    /*
-    public function findOneBySomeField($value): ?User
+    /**
+    * @return User[] 
+    */
+   
+   public function FindEq(Formation $formation)
     {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
+        $qb = $this->createQueryBuilder("u")
+            ->where(':formation MEMBER OF u.formations')
+            ->setParameters(array('formation' => $formation))
+        ;
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+    * @return User[] 
+    */
+   
+   public function FindUS(Session $session)
+   {
+       $qb = $this->createQueryBuilder("u")
+           ->select('u')
+           ->where(':session MEMBER OF u.sessions')
+           ->setParameters(array('session' => $session))
+       ;
+       return $qb->getQuery()->getResult();
+   }
+
+  
+    public function findByEmail($value):? User
+    {
+        return $this->getEntityManager()
+        ->createQuery(
+           'SELECT u
+            FROM  App\Entity\User u
+            where (u.email LIKE :value) and (u.roles NOT LIKE :role)and(u.statut LIKE :valide)'
+        )
+     
+        ->setParameter('valide', '%' . 'validé' . '%')
+        ->setParameter('value', '%'.$value.'%')
+        ->setParameter('role', '%"'.'ROLE_ADMIN'.'"%') 
+        ->getSingleResult()
+           
         ;
     }
-    */
+    
     
     /**
      * @return PaginationInterface
@@ -90,4 +126,21 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         );
     }
 
+
+
+    public function findOneByEmail( $valeur)
+    {
+
+  
+        return $this->createQueryBuilder('u')
+        ->select('u') 
+        ->where('u.email LIKE :val') 
+        
+        ->setParameter('val', '%' . $valeur . '%') 
+        ->getQuery()
+        ->getResult();
+
+    }
+
+  
 }

@@ -5,6 +5,8 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use App\Entity\Formation;
 use App\Entity\User;
@@ -12,6 +14,7 @@ use App\Entity\Session;
 use App\Entity\Equipe;
 use App\Repository\FormationRepository;
 use App\Repository\SessionRepository;
+use App\Repository\UserRepository;
 use App\Form\ProposerFormationType;
 use Doctrine\Common\Collections\ArrayCollection;
 use Knp\Component\Pager\PaginatorInterface;
@@ -26,7 +29,8 @@ class PiloterController extends AbstractController
     {
 
         $user = $tokenStorage->getToken()->getUser();
-        $donnees = $this->getDoctrine()->getRepository(Formation::class)->findBy([],['created_at' => 'desc']);
+        
+        $donnees = $this->getDoctrine()->getRepository(Formation::class)->findBy(['user' => $user->getId()]);
 
         $formations = $paginator->paginate(
             $donnees, // Requête contenant les données à paginer (ici nos articles)
@@ -46,22 +50,10 @@ class PiloterController extends AbstractController
     {
 
         $user = $tokenStorage->getToken()->getUser();
-        $em = $this->getDoctrine()->getManager();
-        $formation = $repository->find($id);
-        // $formation->setImage(
-        //     new File($this->getParameter('photo_directory').'/'.$formation->getImage())
-        // );
-        // $equipes=$formation->getEquipes();
-        // foreach($equipes as $eq){
-        //     $eq->setPhoto(
-        //         new File($this->getParameter('photo_directory').'/'.$eq->getPhoto())
-        //     );
-        // }
-   
-    
-        // Create an ArrayCollection of the current Tag objects in the database
 
-        $form = $this->createForm(ProposerFormationType::class, $formation);
+        $em = $this->getDoctrine()->getManager();
+        $formation = $this->getDoctrine()->getRepository(Formation::class)->find($id);
+
 
         $originalEquipes = new ArrayCollection();
         $originalSessions = new ArrayCollection();
@@ -73,13 +65,16 @@ class PiloterController extends AbstractController
         foreach ($formation->getSessions() as $s) {
             $originalSessions->add($s);
         }
+    
+       
+
+        $form = $this->createForm(ProposerFormationType::class, $formation);
+
+  
         $form->handleRequest($request);
             
         if($form->isSubmitted() && $form->isValid()){
 
-
-            
-        
 
             $g=$form['gratuit']->getData();
             if($g==1){
@@ -121,26 +116,32 @@ class PiloterController extends AbstractController
 
         $equipes = $form->get('equipes');
         foreach($equipes as $e){
-        $file=$e->get('photo')->getData();
+        
+            if($e->getData()!=null){
+                // $formation->setUser($e->getData());
+                $e->getData()->setStatut('rien');
+                $e->getData()->setRoles(["ROLE_COLLABORATEUR"]);
+                }
+        // $file=$e->get('image')->getData();
             
-        if ($file) {
-            $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-            // this is needed to safely include the file name as part of the URL
-            $safeFilename = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', $originalFilename);
-            $fichier = $safeFilename . '-' . uniqid() . '.' . $file->guessExtension();
+    //     if ($file) {
+    //         $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+    //         // this is needed to safely include the file name as part of the URL
+    //         $safeFilename = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', $originalFilename);
+    //         $fichier = $safeFilename . '-' . uniqid() . '.' . $file->guessExtension();
 
-        // On copie le fichier dans le dossier uploads
-        $file->move(
-            $this->getParameter('photo_directory'),
-            $fichier
-        );
+    //     // On copie le fichier dans le dossier uploads
+    //     $file->move(
+    //         $this->getParameter('photo_directory'),
+    //         $fichier
+    //     );
         
-        // On crée l'image dans la base de données
+    //     // On crée l'image dans la base de données
         
-       $e->getData()->setPhoto($fichier);
-
+    //    $e->getData()->setImage($fichier);
+    // }
     }
-}
+
             if ($form->getClickedButton() === $form->get('sauvegarder')){
                 dump($formation);
                 $this->addFlash('notice', 'la Formation est sauvegardée en tant que brouillon');
@@ -156,7 +157,7 @@ class PiloterController extends AbstractController
                 foreach ($originalEquipes as $originalEquipe) {
                 if ($formation->getEquipes()->contains($originalEquipe) === false) {
                     $formation->removeEquipe($originalEquipe);
-                    $originalEquipe->setFormation(null);
+                    $originalEquipe->removeFormation($formation);
                     $em->remove($originalEquipe);
 //                    $em->persist($originalSpeaker);
                 }
@@ -180,6 +181,8 @@ class PiloterController extends AbstractController
   
     return $this->redirectToRoute("modifier",['id'=>$id]);  
         }
+
+        
         return $this->render('formations/ProposerFormation.html.twig', [
             'user' => $user,'formation'=>$formation,'form' => $form->createView(),
         ]);
@@ -204,6 +207,42 @@ class PiloterController extends AbstractController
         
         return $this->redirectToRoute('piloter',['f'=>$f]);
     }
+
+
+ 
+ /**
+   * Creates a new ActionItem entity.
+   *
+   * @Route("/users/{id}", name="usersS")
+   * 
+   */
+  public function getting($id)
+  {
+      $em = $this->getDoctrine()->getManager();
+      
+     $session=$em->getRepository(Session::class)->find($id);
+     $users =  $em->getRepository(User::class)->findUs($session);
+       
+      if(!$users) {
+          $result['users']['error'] = "Aucun Inscrit!";
+      } else {
+          $result['users'] = $this->getRealEntities($users);
+     
+
+      }
+
+
+      return new Response(json_encode($result));
+  }
+
+  public function getRealEntities($users){
+
+      foreach($users as $equipe){
+          $realEntities[$equipe->getId()] = [$equipe->getEmail(),$equipe->getName()];
+      }
+
+      return $realEntities;
+  }
 
    
 }

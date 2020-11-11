@@ -242,7 +242,7 @@ section
 	padding: 0px !important;
 }
 #proposer_formation_equipes div input[type='file']{
-	margin-left: 35.2%;
+	margin-left: 2%;
 }
 #gratuit div{
 	float: right;
@@ -258,10 +258,10 @@ input[type="date"]:before {
     content: "";
   }
 
-.well div:not(:first-child) {
+/* .well div:not(:first-child) {
 	margin-top:4%
 
-}
+} */
 
 
 
@@ -748,9 +748,12 @@ input[type="file" i] {
 	margin-top:-11.1%;
 	margin-left:390px
 }
+.field:first-child{
+	margin-top:4%;
+}
 #proposer_formation_equipes div div:nth-child(3){
 	margin-top:2%;
-    margin-left: 28%;
+    margin-left: 0%;
 }
 label {
     display: inline-block;

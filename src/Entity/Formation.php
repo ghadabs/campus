@@ -86,16 +86,18 @@ class Formation
     protected $gratuit;
 
     /**
-     * @ORM\OneToMany(targetEntity="Session", mappedBy="formation", cascade={"persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="Session", mappedBy="formation", cascade={"persist"},orphanRemoval=true)
      */
     protected $sessions;
 
-
-
     /**
-     * @ORM\OneToMany(targetEntity=Equipe::class, mappedBy="formation",cascade={"persist","remove"},orphanRemoval=true )
+     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="formations", cascade={"refresh","persist"},orphanRemoval=true)
      */
-    private $equipes;
+    protected $equipes;
+
+ 
+
+
 
    
 
@@ -107,6 +109,8 @@ class Formation
 
         $this->sessions = new ArrayCollection();
         $this->equipes = new ArrayCollection();
+       
+       
    
    
        
@@ -294,37 +298,30 @@ class Formation
     }
 
     /**
-     * @return Collection|Equipe[]
+     * @return Collection|User[]
      */
     public function getEquipes(): Collection
     {
         return $this->equipes;
     }
 
-    public function addEquipe(Equipe $equipe)
+    public function addEquipe(User $equipe): self
     {
-      
-            $this->equipes->add($equipe);
-            $equipe->setFormation($this);
-         
-
-      
-    }
-
-    public function removeEquipe(Equipe $equipe): self
-    {
-        if ($this->equipes->contains($equipe)) {
-            $this->equipes->removeElement($equipe);
-            $equipe->setFormation(null);
+        if (!$this->equipes->contains($equipe)) {
+            $this->equipes[] = $equipe;
         }
 
         return $this;
     }
 
+    public function removeEquipe(User $equipe): self
+    {
+        if ($this->equipes->contains($equipe)) {
+            $this->equipes->removeElement($equipe);
+        }
 
-
-   
-   
+        return $this;
+    }
 
 
 }

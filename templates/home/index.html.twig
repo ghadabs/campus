@@ -72,8 +72,8 @@
 							<h3 class="course_title"><a href="{{path('detail',{ 'id': f.id })}}">{{f.title}}</a></h3>
 							<div class="course_teacher">{{f.user.name}}</div>
 							<div class="course_text">{{f.sessions | length}} sessions</div>
-							<div class="course_text">
-								<p>{{f.description | slice(0, 55)}} ...</p>
+							<div class="course_text" style="height:50px">
+								<p>{{f.description | slice(0, 55)| raw}}...</p>
 							</div>
 						</div>
 						<div class="course_footer">

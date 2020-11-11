@@ -24,8 +24,8 @@ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
-//use Symfony\Component\Form\Extension\Core\Type\SessionType;
-// use App\Form\SessionType;
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
+
 
 
 class ProposerFormationType extends AbstractType
@@ -47,9 +47,9 @@ class ProposerFormationType extends AbstractType
                 'label' => false,
                 'mapped' => false,
                 'data_class' => NULL,
-                'attr'=>[ 'style'=>'margin-top: 2%;
+                'attr'=>[ 'style'=>'margin-top: 13%;
                 font-family: Exo ,sans-serif;
-                width: auto;
+                width: 100%;
                 margin-left: 10%;
                 padding-bottom: 4%;',
                 'class'=>'file-upload'],
@@ -67,16 +67,13 @@ class ProposerFormationType extends AbstractType
                     ])
                 ],
             ])
-            ->add('description', TextareaType::class, [
-                'label' => false,
-                'required' => false,
-                'attr' => [
-                    'placeholder' => 'description',
-                    'class' => 'form-control',
-                    'style' => '
-                    height: 210px'
-                ]
-            ])
+            ->add('description', CKEditorType::class , array(
+                'label'=>false,
+                'config' => array(
+                    'style' => 'margin-right:3.5%',
+                    //...
+                ),
+            ))
             ->add('tarif', TextType::class, [
                 'label' => false,
                 'required' => false,
@@ -191,7 +188,7 @@ class ProposerFormationType extends AbstractType
                 ])
  
             
-            ->add('sauvegarder', SubmitType::class, ['label' => 'Sauvegarder','attr'=>['class'=>'home_search_button','style'=>'width: 100%;']])
+            ->add('sauvegarder', SubmitType::class, ['label' => 'Sauvegarder','attr'=>['class'=>'home_search_button','style'=>'width: 100%;    background: lightgrey']])
             ->add('Prete', SubmitType::class, ['label' => 'Formation Prete','attr'=>['class'=>'home_search_button','style'=>'width: 100%;']]);
   
         
@@ -202,7 +199,8 @@ class ProposerFormationType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Formation::class,
             'csrf_protection' => false,
-            'cascade_validation' => true
+            'cascade_validation' => true,
+            'compound' =>true,
         ]);
     }
 

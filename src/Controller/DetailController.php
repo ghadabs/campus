@@ -8,8 +8,8 @@ use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Formation;
 use App\Repository\FormationRepository;
 use App\Entity\Session;
-use App\Entity\Equipe;
-use App\Repository\EquipeRepository;
+use App\Entity\User;
+use App\Repository\UserRepository;
 use App\Repository\SessionRepository;
 use App\Form\SessionType;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -19,12 +19,15 @@ class DetailController extends AbstractController
     /**
      * @Route("/detail/{id}", name="detail")
      */
-    public function index($id, Request $request,SessionRepository $repository,EquipeRepository $repo, TokenStorageInterface $tokenStorage)
+    public function index($id, Request $request,SessionRepository $repository,UserRepository $repo, TokenStorageInterface $tokenStorage)
     {
         $user = $tokenStorage->getToken()->getUser();
         $formation = $this->getDoctrine()->getRepository(Formation::class)->find($id);
-        $sessions = $repository->findBy(['formation' => $id], ['date_inscri_deb' => 'DESC']);
-        $equipe = $repo->FindBy(['formation'=>$formation]);
+        $sessions = $repository->findBy(['formation'=>$formation]);
+        $users = $this->getDoctrine()->getRepository(User::class)
+                    ->createQueryBuilder('u')
+                    ->innerJoin('u.sessions', 's');
+        $equipe = $repo->FindEq($formation);
 
         $session=new Session();
       
@@ -40,7 +43,7 @@ class DetailController extends AbstractController
            return $this->redirectToRoute('detail', ['id' => $id]);
         }
         return $this->render('detail/index.html.twig', [
-            'formation' => $formation, 'user' => $user, 'sessions' => $sessions,'equipe'=>$equipe,'form' => $form->createView()
+           'users'=>$users, 'formation' => $formation, 'user' => $user, 'sessions' => $sessions,'equipe'=>$equipe,'form' => $form->createView()
         ]);
     }
 

@@ -13,9 +13,9 @@
 						<div class="breadcrumbs">
 							<ul>
 								<li>
-									<a href="index.html">Home</a>
+									<a href="index.html">Accueil</a>
 								</li>
-								<li>Courses</li>
+								<li>Piloter</li>
 							</ul>
 						</div>
 					</div>
@@ -25,13 +25,15 @@
 	</div>
 
 	<div class="container">
-		<div
+		{# <div
 			class="row">
 
 
 			<!-- Courses Main Content -->
-			<div class="col-lg-12">
+			<div class="col-lg-12"> #}
 				<div class="tab-pane fade show active" id="Section1" style="margin-left: 2%;">
+				<div class="row">
+				<div class="col-9">
 					<h3 class="text-center" style ="margin-top:2%">Les Formations</h3>
 
 					<div class="span5" style="margin-top:2%">
@@ -52,10 +54,14 @@
 								{% for f in formations %}
 									
 										<tr>
-											<td>
+											
+											<td  style="width: 20%;">
 												<h5 style="color:#555" href="#">{{f.title}}</h5>
+										
 											</td>
-											<td>{{f.createdAt.modify("-1 hour")| ago}}</td>
+											
+											
+											<td>{{f.createdAt | ago}}</td>
 											<td>{{f.user.name}}</td>
                                             <td>{{f.sessions|length}} session(s)</td>
 											<td>
@@ -75,26 +81,125 @@
 														onclick="return confirm('Voulez-vous vraiment supprimer cette formation ?')">Supprimer</a>
 													</button>
 												</td>
-												<td></td>
+												
 										
-											
+
 										</tr>
+										<tr>
+									
+										
+										<td >
+											
+											
+											<div id="sessions" style="width:100%" >
+											{% for s in f.sessions %}
+									       <div class="tab_panel active" style="width: 497%;height: 101px;">
+											<p>Prévue le :</p>
+											<div class="row">
+
+												<div class="col-3 row" style="max-width:fit-content;margin-top: 2%;">
+
+													<div class="col" style="max-width:min-content;">
+														<div class="tab_panel_title" id="deb" style="font-size:xx-large">{{s.dateDeb|date('d') }}</div>
+													</div>
+													<div class="row">
+														<div class="col">
+															<div class="tab_panel_title" id="mois" style="font-size:initial">{{s.dateDeb|format_date('MMM', 'fr', 'Europe/Paris', constant('IntlDateFormatter::LONG')) }}</div>
+															<div class="tab_panel_title" id="year" style="font-size: inherit;">{{s.dateDeb|date('Y') }}</div>
+														</div>
+													</div>
+
+												</div>
+												<div class="tab_panel_content col" style="text-align:center;max-width: max-content;padding-left: 37px;">
+													<div class="tab_panel_text">
+														<p style="font-size: 14px;">{{s.formation.title}}</p>
+														{% if s.dateDeb|date('d') == s.dateFin|date('d') %}
+															<h5 style="font-size:small">Durée:
+																{{s.dateDeb|date('H:i')}}
+																-
+																{{s.dateFin|date('H:i')}}</h5>
+														{% else %}
+															<h5 style="font-size:small">
+																jusqu'à
+																{{s.dateFin|format_date(null, 'fr', 'Europe/Paris', constant('IntlDateFormatter::LONG')) }}</h5>
+														{% endif %}
+													</div>
+
+
+												</div>
+												<div class="tab_panel_content col" style="max-width: max-content;padding-left: 37px;">
+													<div class="tab_panel_text">
+														<h5 style="font-size:small">Nombre de places disponibles:
+															<span style="color: #76777a;">{{s.nbrePlaces}}</h5>
+															<p style="font-size: 14px;">{{s.adresse}}</p>
+															<br>
+														</div>
+												<button type="submit" class="btn btn-outline-info" style="color:rgb(76, 224, 228);    margin-top: -50%;margin-left: 139%;" >
+												<a id="ss" onclick="enabledChange('{{ user.id }}', '{{ path('usersS', {'id': s.id}) }}')"style="color:rgb(76, 224, 228)" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgb(76, 224, 228)';">
+												Les inscrits</a>
+												</button>
+
+													</div>
+												</div>
+											</div>
+											<br>
+												{% endfor %}
+											</div>
+											
+												
+											</td>
+										
+										</tr>
+											
+										
 									
 								{% endfor %}
 							</tbody>
 						</table> 
 						
 					</div>
+					</div>
+
+					<div class="col-3">
+					<h3 class="text-center" style ="margin-top:13%">Les inscrits</h3>
+                   <table class="table" id="inscrits">
+				<thead style="background-color:white">
+					<tr>
+
+						<th scope="col" style='color: #76777a;font-family: Roboto Slab, serif;'>Email</th>
+						<th scope="col" style='color: #76777a;font-family: Roboto Slab, serif;'>Nom</th>
+
+					</tr>
+				</thead>
+				<tbody>
+					
+							<tr>
+
+								<td id ="name"style="font-family: 'Roboto Slab', serif;color: #384158;"></td>
+								<td id="email"style="font-family: 'Roboto Slab', serif;color: #384158;"></td>
+
+							</tr>
 					
 
+				</tbody>
+			</table>
+
+					
+			
+					
+				
+					</div>
+					
+
+				</div>
 				</div>
 {{ knp_pagination_render(formations) }}
 			</div>
 
-		</div>
+		{# </div>
 
 
-	</div>
+	</div> #}
 
 
 

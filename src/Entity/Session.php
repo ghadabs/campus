@@ -6,6 +6,9 @@ use App\Repository\SessionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\ExpressionValidator;
 
 /**
  * @ORM\Entity(repositoryClass=SessionRepository::class)
@@ -45,7 +48,7 @@ class Session
     private $nbrePlaces;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Formation", inversedBy="sessions")
+     * @ORM\ManyToOne(targetEntity="Formation", inversedBy="sessions",cascade={"remove"})
      * @ORM\JoinColumn(name="formation_id", referencedColumnName="id")
      */
     private $formation;
@@ -64,7 +67,6 @@ class Session
      * @ORM\ManyToMany(targetEntity=User::class, inversedBy="sessions")
      */
     private $users;
-
 
 
     public function __construct()
@@ -204,7 +206,9 @@ class Session
         return $this;
     }
 
-
+    public function __toString() {
+        return $this->id;
+    }
 
 
 

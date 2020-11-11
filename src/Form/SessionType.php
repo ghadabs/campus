@@ -16,33 +16,34 @@ use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 
+
 class SessionType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
         ->add('date_inscri_deb', DateTimeType::class, [
-            'label'=> 'Debut d\'inscription',
+            'label'=> 'Debut d\'inscription* :',
             'widget' => 'single_text',
             'empty_data' => null,
             'required' => false,
             // 'input'  => 'datetime_immutable',
 
-            'attr' => ['class' => 'js-datepicker form-control','id'=>'date_inscri_deb','style'=>'width:45%'
+            'attr' => ['class' => 'js-datepicker form-control inscrideb','id'=>'date_inscri_deb','style'=>'width:45%'
          ],
         ])
         ->add('date_inscri_fin', DateTimeType::class, [
-            'label'=> 'Fin d\'inscription',
+            'label'=> 'Fin d\'inscription* :',
             'widget' => 'single_text',
             // 'input'  => 'datetime_immutable',
             'empty_data' => null,
             'required' => false,
             // adds a class that can be selected in JavaScript
-            'attr' => ['class' => 'js-datepicker form-control','style'=>'width:89%'
+            'attr' => ['class' => 'js-datepicker form-control inscrifin','style'=>'width:89%'
             ],
         ])
         ->add('nbrePlaces' ,NumberType::class, [
-            'label'    => 'Nombre de places',
+            'label'    => 'Nombre de places* :',
             'required' => false,
             'empty_data' => null,
             'attr' => [
@@ -56,29 +57,29 @@ class SessionType extends AbstractType
             ])
 
         ->add('date_deb', DateTimeType::class, [
-            'label'=> 'Début de session ',
+            'label'=> 'Début de session* : ',
             'widget' => 'single_text',
             'required' => false,
             // 'input'  => 'datetime_immutable',
             'empty_data' => null,
             // adds a class that can be selected in JavaScript
-            'attr' => ['class' => 'js-datepicker form-control','id'=>'date_deb','style'=>'width:45%'
+            'attr' => ['class' => 'js-datepicker form-control deb','id'=>'date_deb','style'=>'width:45%'
             ],
         ])
         ->add('date_fin', DateTimeType::class, [
-            'label'=> 'Fin de session ',
+            'label'=> 'Fin de session* : ',
             'widget' => 'single_text',
             'required' => false,
             // 'input'  => 'datetime_immutable',
             'empty_data' => null,
             // adds a class that can be selected in JavaScript
-            'attr' => ['class' => 'js-datepicker form-control','id'=>'date_fin','style'=>'width:89%'
+            'attr' => ['class' => 'js-datepicker form-control fin','id'=>'date_fin','style'=>'width:89%'
             ],
         ])
    
 
         ->add('adresse', TextType::class, [
-            'label' => 'Adresse',
+            'label' => 'Adresse* :',
             'required' => false,
             'empty_data' => '',
             'attr' => [

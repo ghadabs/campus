@@ -42,8 +42,11 @@
   }
 
   .avatar {
-    width: 200px;
-    height: 240px;
+    margin-top: 12%;
+    height: 259px;
+    margin-left: 7%;
+    width: 100%;
+
   }
   #proposer_formation_description {
  
@@ -56,11 +59,12 @@
     margin-top: 5%;
   }
   #proposer_formation_equipes div input[type="file"] {
-    margin-left: 10%;
+    /* margin-left: 10%; */
+    width:100%
   }
 
   .btn.btn-danger.second {
-    margin-top: 38.1%;
+    /* margin-top: 38.1%; */
   }
   #proposer_formation_sessions div div:nth-child(2) {
     margin-top: -81.9px;
@@ -389,11 +393,10 @@
     margin-left: 22%;
   }
   #proposer_formation_equipes div input[type="file"] {
-    margin-left: -7%;
+    /* margin-left: -7%; */
+    width:100%
   }
-  .btn.btn-danger.second {
-    margin-top: 70.1%;
-  }
+
 
   #proposer_formation_sessions div div:nth-child(2) {
     margin-left: 178px;

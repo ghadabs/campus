@@ -5,14 +5,17 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use App\Entity\Formation;
 use App\Entity\User;
 use App\Entity\Session;
 use App\Entity\Equipe;
 use App\Repository\FormationRepository;
 use App\Repository\SessionRepository;
+use App\Repository\UserRepository;
 use App\Data\SearchData;
 use App\Form\SearchHomeType;
+use App\Form\CollabSearchType;
 // use App\Form\SessionType;
 use App\Form\ProposerFormationType;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -55,17 +58,19 @@ class FormationsController extends AbstractController
     /**
      * @Route("/proposer", name="proposer")
      */
-    public function Proposer(TokenStorageInterface $tokenStorage, FormationRepository $repository,SessionRepository $reposit, Request $request)
+    public function Proposer(TokenStorageInterface $tokenStorage, FormationRepository $repository,SessionRepository $reposit, UserRepository $repo, Request $request)
     {
         
         $user = $tokenStorage->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();
+
         $formation=new Formation();
 
- 
-
         $form = $this->createForm(ProposerFormationType::class, $formation);
+      
+     
         $form->handleRequest($request);
+     
             
         if($form->isSubmitted() && $form->isValid()){
 
@@ -109,21 +114,36 @@ class FormationsController extends AbstractController
 
         $equipes = $form->get('equipes');
         foreach($equipes as $e){
-        $file=$e->get('photo')->getData();
             
-       if($file){
-        $fichier = md5(uniqid()).'.'.$file->guessExtension();
+            // // if($requestString!=null){
+            // $e->getData($equipe);
+          
+            // }
+       if($e->getData()!=null){
+        // $formation->setUser($e->getData());
+        $e->getData()->setStatut('rien');
+        $e->getData()->setRoles(["ROLE_COLLABORATEUR"]);
+        }
+     
+            
+
+    //     $file=$e->get('image')->getData();
+            
+    //    if($file){
+    //     $fichier = md5(uniqid()).'.'.$file->guessExtension();
         
-        // On copie le fichier dans le dossier uploads
-        $file->move(
-            $this->getParameter('photo_directory'),
-            $fichier
-        );
+    //     // On copie le fichier dans le dossier uploads
+    //     $file->move(
+    //         $this->getParameter('photo_directory'),
+    //         $fichier
+    //     );
         
-        // On crée l'image dans la base de données
+    //     // On crée l'image dans la base de données
         
-        $e->getData()->setPhoto($fichier);
-    }else {$e->getData()->setPhoto('https://mauritanie-talent-innovation.org/toto.png');}
+    //     $e->getData()->setImage($fichier);
+  
+    //         }
+            
     }
 
             if ($form->getClickedButton() === $form->get('sauvegarder')){
@@ -148,10 +168,48 @@ class FormationsController extends AbstractController
         }
     
         return $this->render('formations/ProposerFormation.html.twig', [
-             'user' => $user,'form' => $form->createView(),'formation'=>$formation
+             'user' => $user,'form' => $form->createView(),'formation'=>$formation,
+            //  'formE' => $formE->createView()
              
         ]);
     }
 
+
+
+
+   /**
+   * Creates a new ActionItem entity.
+   *
+   * @Route("/search", name="ajax_search")
+   * 
+   */
+  public function searchAction(Request $request)
+  {
+      $em = $this->getDoctrine()->getManager();
+      
+      $formation=new Formation;
+      $requestString = $request->get('q');
+      $equipe =  $em->getRepository(User::class)->findByEmail($requestString);
+       
+      if(!$equipe) {
+          $result['equipe']['error'] = "Aucun résultat";
+      } else {
+          $result['equipe'] = $this->getRealEntities($equipe);
+     
+
+      }
+
+
+      return new Response(json_encode($result));
+  }
+
+  public function getRealEntities($equipe){
+
+      
+          $realEntities[$equipe->getId()] = [$equipe->getEmail(),$equipe->getName(),$equipe->getImage(),$equipe->getFonction(),$equipe->getEntite(),$equipe->getDescription()];
+      
+
+      return $realEntities;
+  }
 
 }

@@ -9,6 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use App\Entity\Formation;
 use App\Data\SearchData;
+use App\Repository\FormationRepository;
 
 class SearchSessionType extends AbstractType
 {
@@ -26,7 +27,10 @@ class SearchSessionType extends AbstractType
                 'class' => 'dropdown_item_select home_search_input',
                 'style' => 'border: none;'
             ],
-            'placeholder' => 'Formations'
+            'placeholder' => 'Formations',
+            'query_builder' => function(FormationRepository $repo) {
+                return $repo->findFormation();
+            }
 
         ])
         ->add('dateDeb', DateType::class, [

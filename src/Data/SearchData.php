@@ -50,4 +50,9 @@ class SearchData
      */
     public $dateFin;
 
+    /**
+     * @var string
+     */
+    public $email;
+
 }

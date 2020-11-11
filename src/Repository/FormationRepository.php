@@ -74,7 +74,7 @@ class FormationRepository extends ServiceEntityRepository
         return $this->paginator->paginate(
             $query,
             $search->page,
-            1
+          3
         );
     }
 
@@ -138,10 +138,20 @@ class FormationRepository extends ServiceEntityRepository
         return $this->paginator->paginate(
             $query,
             $search->page,
-            1
+            3
         );
     }
 
+    public function findFormation()
+    {
+        return $this->createQueryBuilder('f')
+            ->select('f')
+            ->orderBy('f.created_at', 'DESC')
+            ->andWhere('f.statut LIKE :valide')
+            ->setParameter('valide',  'validée')
+       
+        ;
+    }
 
 
 }

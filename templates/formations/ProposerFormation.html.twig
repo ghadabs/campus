@@ -1,6 +1,6 @@
 {% extends 'baseHome.html.twig' %}
 
-{% block title %}Formations
+{% block title %}Proposer Formation
 {% endblock %}
 
 {% block body %}
@@ -17,7 +17,8 @@
 								{% if formation.id == null %}
 								<li>Proposer</li>
 								{% else %}
-								<li>Piloter</li>
+								<li><a href="{{path('piloter')}}">Piloter</a></li>
+								<li>{{formation.title}}</li>
 								{% endif %}
 							</ul>
 						</div>
@@ -79,7 +80,7 @@
 
 
 											<label for="first_name">
-												<h4>Titre</h4>
+												<h4>Titre* :</h4>
 											</label>
 											{{form_row(form.title)}}
 										</div>
@@ -89,7 +90,7 @@
 
 
 											<label for="last_name">
-												<h4>Categorie</h4>
+												<h4>Categorie* :</h4>
 											</label>
 											{{form_row(form.categorie)}}
 										</div>
@@ -99,7 +100,7 @@
 
 
 											<label for="phone">
-												<h4>Type</h4>
+												<h4>Type* :</h4>
 											</label>
 											{{form_row(form.type)}}
 										</div>
@@ -110,7 +111,7 @@
 										<div class="form-group" style="margin-left: 5%;">
 
 											<label for="mobile">
-												<h4>Niveau</h4>
+												<h4>Niveau* :</h4>
 											</label>
 											{{form_row(form.niveau)}}
 										</div>
@@ -120,7 +121,7 @@
 										<div class="form-group" id="langue">
 
 											<label for="email">
-												<h4>Langue</h4>
+												<h4>Langue* :</h4>
 											</label>
 											{{form_row(form.langue)}}
 										</div>
@@ -131,7 +132,7 @@
 
 
 											<label class="row" for="password">
-												<h4 class="col" style=' margin-left: 2%;'>Tarif</h4>
+												<h4 class="col" style=' margin-left: 2%;'>Tarif* :</h4>
 												<div class='col'id="gratuit">
 													{{form_row(form.gratuit)}}</div>
 											</label>
@@ -153,9 +154,9 @@
 										
 									</div>
 									<div class="col-8">
-										<div class="form-group">
+										<div class="form-group" style="margin-right:3.9% ">
 											<label for="password2" style="margin-top: -10%;">
-												<h4>Description</h4>
+												<h4>Description* :</h4>
 											</label>
 											{{form_row(form.description)}}
 										</div>
@@ -168,29 +169,47 @@
 
 								<div
 									class="well">
-									{# ... #}
-
-									{{ form_row(form.sessions) }}
-									<a href="#" id="add_category" class="btn btn-info" style="background-color: rgb(76, 224, 228);
-									border-color: rgb(76, 224, 228);">
+										<a href="#" id="add_category" class="btn btn-info" style="background-color: rgb(76, 224, 228);
+												border-color: rgb(76, 224, 228);
+												float: right;
+												border-radius: 20px;
+												margin-top: -2%;
+												margin-right: -2.3%;">
 										<i class="fa fa-plus" aria-hidden="true"></i>
 									</a>
 
+									{# ... #}
+									
+									{{ form_row(form.sessions) }}
+									<br>
+								
 									{# ... #}
 								</div>
 
 							</div>
 							<div role="tabpanel" class="tab-pane fade" id="equipe">
-								<div class="well">
+								<div class="well" style="padding-top: 2%;">
+
+									{# <div id="proposer_formation_equipes" data-prototype="{{ form_widget(form.equipes.vars.prototype)|e('html_attr') }}"> #}
+
 									{# ... #}
-									
-						
-									{# <img src="{{asset('images/reader.png')}}" style="width: 200px;height:250px" class="avata "> #}
-									{{ form_row(form.equipes) }}
-										<a href="#" id="add" class="btn btn-info" style=" background-color: rgb(76, 224, 228);
-										border-color: rgb(76, 224, 228);"> <i class="fa fa-plus" aria-hidden="true"></i>
+									<a href="#" id="add" class="btn btn-info" style=" background-color: rgb(76, 224, 228);
+										border-color: rgb(76, 224, 228);
+										float: right;
+										border-radius: 20px;
+										margin-top: -2%;
+										margin-right: -2.3%;"> <i class="fa fa-plus" aria-hidden="true"></i>
 									</a>
 
+								
+								
+									
+									{# <img src="{{asset('images/reader.png')}}" style="width: 200px;height:250px" class="avata "> #}
+									{{ form_widget(form.equipes) }}
+							
+									<br>
+									<br>
+								  
 									{# ... #}
 								</div>
 

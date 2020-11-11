@@ -10,6 +10,7 @@
         "doctrine/doctrine-bundle": "^2.1",
         "doctrine/doctrine-migrations-bundle": "^2.1",
         "doctrine/orm": "^2.7",
+        "friendsofsymfony/ckeditor-bundle": "^2.0",
         "knplabs/knp-paginator-bundle": "^4.1",
         "knplabs/knp-time-bundle": "^1.12",
         "phpdocumentor/reflection-docblock": "^4.3",

@@ -23,22 +23,25 @@ class SessionRepository extends ServiceEntityRepository
         $this->paginator = $paginator;
     }
 
-    // /**
-    //  * @return Session[] Returns an array of Session objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @return Session[] Returns an array of Session objects
+     */
+    
+    public function findDate()
     {
         return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('s.id', 'ASC')
-            ->setMaxResults(10)
+            ->select('f', 's')
+            ->leftJoin('s.formation', 'f')
+            ->andWhere('s.date_deb > CURRENT_DATE()')
+            ->orderBy('s.date_inscri_deb', 'DESC')
+            ->andWhere('f.statut LIKE :valide')
+            ->setParameter('valide', 'validée')
+            
             ->getQuery()
             ->getResult()
         ;
     }
-    */
+   
 
     /*
     public function findOneBySomeField($value): ?Session
@@ -87,7 +90,10 @@ class SessionRepository extends ServiceEntityRepository
         return $this->paginator->paginate(
             $query,
             $search->page,
-            1
+            3
         );
     }
+
+
+    
 }

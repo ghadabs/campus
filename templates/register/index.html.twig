@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello RegisterController!
+{% block title %}Inscription
 {% endblock %}
 
 {% block body %}
@@ -9,44 +9,65 @@
 	{{form_start(form1)}}
 	<div class="body"></div>
 	<div class="grad" style="background-image:url(images/talan.jpg);width: 110%;height: 110%;"></div>
-	<div class="header">
+	<div class="header" style=" margin-top: -8%;
+    margin-left: 7%;
+			}">
 		<div>Campus<span>Talan
 			</span>
 		</div>
 	</div>
 	<br>
 
-	<div class="login">
+	<div class="login" style="    margin-left: -19%;
+    margin-top: -2%;">
 		{%for message in app.flashes('notice')%}
-		<div class="alert alert-success text-center" style="margin-bottom:2%;font-family: Exo ,sans-serif;">
-			{{message}}
-		</div>
-		{%endfor%}
-
-		<div class="sticky-top">
-			<div class="clearfix">
-				{{form_row(form1.email,{'attr': {'class': 'form-control'}})}}
+			<div class="alert alert-success text-center" style="margin-bottom:2%;font-family: Exo ,sans-serif;font-size: initial;">
+				{{message}}
 			</div>
-			<div class="clearfix">
-				{{form_row(form1.name)}}
+			{%endfor%}
+
+			<div class="sticky-top">
+				<div class="clearfix">
+					{{form_row(form1.email,{'attr': {'class': 'form-control'}})}}
+				</div>
+				<div class="clearfix">
+					{{form_row(form1.name)}}
+				</div>
+
+				<div class="clearfix">
+					{{form_row(form1.password)}}
+				</div>
+
+
+				<div class="clearfix">
+					{{form_row(form1.image)}}
+				</div>
+
 			</div>
+			<div class="vl" style=" border-right: 1.5px solid rgb(76, 224, 228);
+										  height: 170px;    margin-top: -50%;
+										    margin-right: 18%;"></div>
 
-			<div class="clearfix">
-				{{form_row(form1.password)}}
+
+			<div class="sop" style="    margin-left: 96%;
+					    margin-top: -48%;">
+				<div class="clearfix">
+					{{form_row(form1.fonction,{'attr': {'class': 'form-control'}})}}
+				</div>
+				<div class="clearfix">
+					{{form_row(form1.entite)}}
+				</div>
+
+				<div class="clearfix">
+					{{form_row(form1.description)}}
+				</div>
 			</div>
+			<input type="submit" href="#" value="Inscrire" style="margin-top: 15%;
+			    width: 171%;">
+		
 
-
-			<div class="clearfix">
-				{{form_row(form1.image)}}
-			</div>
-
-
-			<div>
-				<input type="submit" href="#" value="Inscrire">
-			</div>
-
-		</div>
-		{{form_end(form1)}}
 
 	</div>
-{% endblock %}
+	{{form_end(form1)}}
+
+</div>{% endblock %}
